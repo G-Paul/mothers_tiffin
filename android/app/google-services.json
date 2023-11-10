@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "849556006712",
+    "project_id": "kitchen-mamas",
+    "storage_bucket": "kitchen-mamas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849556006712:android:1ed01af85f4ea36aaa43cd",
+        "android_client_info": {
+          "package_name": "com.mkitchen.com.mothers_kitchen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV7YG_8zLidSki_UufmlwPsyFSvNWkc60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849556006712:android:3f84f478133c46b7aa43cd",
+        "android_client_info": {
+          "package_name": "com.mothers.tiffin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV7YG_8zLidSki_UufmlwPsyFSvNWkc60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849556006712:android:b5e3b1c6e6630bffaa43cd",
+        "android_client_info": {
+          "package_name": "com.motherstiffin.com.mothers_tiffin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV7YG_8zLidSki_UufmlwPsyFSvNWkc60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
