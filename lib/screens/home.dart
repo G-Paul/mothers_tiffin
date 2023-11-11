@@ -37,15 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Return greeting message based on time for ex: "Good morning, ${_userData[userName]}}"
-  String greetingMessage() {
+  String greetingMessage(String? name) {
     DateTime now = DateTime.now();
     int hour = now.hour;
     if (hour < 12) {
-      return "Good morning, ${_userData["userName"]}";
+      return "Good morning, $name";
     } else if (hour < 17) {
-      return "Good afternoon, ${_userData["userName"]}";
+      return "Good afternoon, $name";
     } else {
-      return "Good evening, ${_userData["userName"]}";
+      return "Good evening, $name";
     }
   }
 
@@ -60,9 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          greetingMessage(),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          greetingMessage(_userData["username"]),
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         actions: [

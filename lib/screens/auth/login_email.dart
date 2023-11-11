@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //widgets
 
@@ -21,6 +23,7 @@ class _SignInScreenState extends State<SignInScreen> {
   String _email = '';
   String _password = '';
   String? _signUpState = null;
+  String userType = 'user';
 
   void _submit() async {
     final isValid = _formKey.currentState!.validate();
@@ -32,9 +35,30 @@ class _SignInScreenState extends State<SignInScreen> {
     try {
       await _firebaseAuth
           .signInWithEmailAndPassword(email: _email, password: _password)
-          .then((value) {
+          .then((value) async {
         print(value);
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+        List<dynamic> admin_ids = await FirebaseFirestore.instance
+            .collection('metadata')
+            .doc('admin')
+            .get()
+            .then((value) => value.data()!['users']);
+        await SharedPreferences.getInstance().then((prefs) {
+          prefs.setBool('isLoggedIn', true);
+          if (admin_ids.contains(value.user!.uid)) {
+            prefs.setString('userType', 'admin');
+            setState(() {
+              userType = 'admin';
+            });
+          } else {
+            prefs.setString('userType', 'user');
+          }
+        });
+        if (userType == 'admin') {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/admin_home', (route) => false);
+        } else {
+          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+        }
       });
     } on FirebaseAuthException catch (e) {
       setState(() {
