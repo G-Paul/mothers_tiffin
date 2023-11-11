@@ -36,6 +36,19 @@ class _HomeScreenState extends State<HomeScreen> {
     print(_userData);
   }
 
+  // Return greeting message based on time for ex: "Good morning, ${_userData[userName]}}"
+  String greetingMessage() {
+    DateTime now = DateTime.now();
+    int hour = now.hour;
+    if (hour < 12) {
+      return "Good morning, ${_userData["userName"]}";
+    } else if (hour < 17) {
+      return "Good afternoon, ${_userData["userName"]}";
+    } else {
+      return "Good evening, ${_userData["userName"]}";
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -46,7 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mothers Kitchen"),
+        title: Text(
+          greetingMessage(),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
         actions: [
           InkWell(
             onTap: () {
