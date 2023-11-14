@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mother\'s Tiffin',
       theme: LightThemes.theme1,
-      darkTheme: DarkThemes.dark,
+      darkTheme: DarkThemes.theme1,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       routes: {
