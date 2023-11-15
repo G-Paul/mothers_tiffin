@@ -131,27 +131,61 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  return GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 40,
-                    mainAxisSpacing: 30,
-                    childAspectRatio: 0.75,
-                    scrollDirection: Axis.vertical,
-                    children:
-                        snapshot.data!.docs.map((DocumentSnapshot document) {
-                      Map<String, dynamic> data =
-                          document.data()! as Map<String, dynamic>;
 
-                      return ItemTile(
-                        id: document.id.toString(),
-                        title: data['name'],
-                        price: data['price'].toDouble(),
-                        category: data['category'],
-                        imageUrl: data['image_url'],
-                      );
-                    }).toList(),
+                  Map<String, dynamic> categories = {};
+                  for (DocumentSnapshot document in snapshot.data!.docs) {
+                    Map<String, dynamic> data =
+                        document.data()! as Map<String, dynamic>;
+                    data['id'] = document.id.toString();
+                    if (categories.containsKey(data['category'])) {
+                      categories[data['category']].add(data);
+                    } else {
+                      categories[data['category']] = [data];
+                    }
+                  }
+
+                  return Column(
+                    children: [
+                      for (var category in categories.keys)
+                        Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.only(
+                                  top: 30, left: 10),
+                              child: Text(
+                                category,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
+                                    ),
+                              ),
+                            ),
+                            GridView.count(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 40,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 0.75,
+                              scrollDirection: Axis.vertical,
+                              children: categories[category]
+                                  .map<Widget>((item) => ItemTile(
+                                        id: item['id'],
+                                        title: item['name'],
+                                        price: item['price'].toDouble(),
+                                        category: item['category'],
+                                        imageUrl: item['image_url'],
+                                      ))
+                                  .toList(),
+                            ),
+                          ],
+                        ),
+                    ],
                   );
                 },
               ),

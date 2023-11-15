@@ -29,7 +29,7 @@ class ItemTile extends StatelessWidget {
       child: Stack(alignment: Alignment.bottomLeft, children: [
         Container(
           height: 200,
-          width: 150,
+          width: 175,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
@@ -41,6 +41,7 @@ class ItemTile extends StatelessWidget {
         ),
         Container(
           height: 100,
+          width: 175,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             gradient: LinearGradient(
