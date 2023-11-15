@@ -73,85 +73,91 @@ class ItemTile extends StatelessWidget {
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                   ),
-                  quantity == 0 ?
-                  InkWell(
-                    onTap: () {
-                      changeCart(id, 1);
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(
+                  quantity == 0
+                      ? InkWell(
+                          onTap: () {
+                            changeCart(id, 1, price);
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Icon(
                               Icons.add_shopping_cart,
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
-                    ),
-                  ) :
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          changeCart(id, -1);
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 25,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(5),
-                              bottomLeft: Radius.circular(5),
-                            ),
-                          ),
-                          child: Icon(
-                                  Icons.remove,
-                                  color: Theme.of(context).colorScheme.onPrimary,
-                                ),
-                        ),
-                      ),
-                      InkWell(
-                        child: Container(
-                          height: 30,
-                          width: 25,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.background,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "$quantity",
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context).colorScheme.onBackground,
-                                  ),
-                            ),
                           ),
                         )
-                      ),
-                      InkWell(
-                        onTap: () {
-                          changeCart(id, 1);
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 25,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5),
-                            ),
-                          ),
-                          child: Icon(
-                                  Icons.add,
-                                  color: Theme.of(context).colorScheme.onPrimary,
+                      : Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                changeCart(id, -1);
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(5),
+                                    bottomLeft: Radius.circular(5),
+                                  ),
                                 ),
+                                child: Icon(
+                                  Icons.remove,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                                child: Container(
+                              height: 30,
+                              width: 25,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.background,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "$quantity",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                      ),
+                                ),
+                              ),
+                            )),
+                            InkWell(
+                              onTap: () {
+                                changeCart(id, 1);
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5),
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.add,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ],

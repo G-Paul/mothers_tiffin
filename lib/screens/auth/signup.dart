@@ -84,7 +84,8 @@ class _SignInScreenState extends State<SignUpScreen> {
           .createUserWithEmailAndPassword(
         email: _email,
         password: _password,
-      ).then((value) async {
+      )
+          .then((value) async {
         setState(() {
           _signUpState = "Creating Profile...";
         });

@@ -14,18 +14,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isCartEmpty = true;
   Map<String, dynamic> _userData = {};
-  Map<String, num> selectedItems = {};
+  Map<String, dynamic> _selectedItems = {};
 
   void getStuff() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    
+
     if (auth.currentUser == null) {
       Navigator.pushNamedAndRemoveUntil(context, '/intro', (route) => false);
     }
     User user = auth.currentUser!;
     String uid = user.uid;
-    
+
     await firestore.collection("Customer").doc(uid).get().then((value) {
       setState(() {
         _userData = value.data()!;
@@ -44,13 +44,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return 'Good Evening';
   }
 
-  void changeCart(id, inc) {
+  void changeCart(id, price, inc) {
     setState(() {
-      selectedItems[id] = (selectedItems[id] ?? 0) + inc;
-      if (selectedItems[id] == 0) {
-        selectedItems.remove(id);
+      if (_selectedItems.containsKey(id)) {
+        _selectedItems[id].quantity += inc;
+      } else {
+        _selectedItems[id] = {'quantity': 1, 'price;': price};
       }
-      _isCartEmpty = selectedItems.isEmpty;
+      if (_selectedItems[id]['quantity'] == 0) {
+        _selectedItems.remove(id);
+      }
+      _isCartEmpty = _selectedItems.isEmpty;
     });
   }
 
@@ -94,8 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               .withOpacity(0.7),
                         ),
                   ),
-                  contentPadding:
-                      const EdgeInsets.only(top: 0, bottom: 0, left: 20, right: 15),
+                  contentPadding: const EdgeInsets.only(
+                      top: 0, bottom: 0, left: 20, right: 15),
                   trailing: InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, '/details');
@@ -161,8 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Container(
                               alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.only(
-                                  top: 30, left: 10),
+                              padding: const EdgeInsets.only(top: 30, left: 10),
                               child: Text(
                                 category,
                                 style: Theme.of(context)
@@ -190,7 +193,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         price: item['price'].toDouble(),
                                         imageUrl: item['image_url'],
                                         changeCart: changeCart,
-                                        quantity: selectedItems[item['id']] ?? 0,
+                                        quantity:
+                                            _selectedItems[item['id']] != null
+                                                ? _selectedItems[item['id']]
+                                                    ['quantity']
+                                                : 0,
                                       ))
                                   .toList(),
                             ),
@@ -219,31 +226,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 20),
                     child: Text(
-                      "${selectedItems.length} items in cart",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                      "${_selectedItems.length} items in cart",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/checkout', arguments: selectedItems);
+                        Navigator.pushNamed(context, '/checkout',
+                            arguments: _selectedItems);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.secondary,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: Text(
                         "Checkout",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary),
                       ),
                     ),
                   ),

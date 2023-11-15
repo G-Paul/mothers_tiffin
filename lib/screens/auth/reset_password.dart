@@ -46,8 +46,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     }
   }
 
-  InputDecoration _textFieldDecoration(
-      {required String labelText}) {
+  InputDecoration _textFieldDecoration({required String labelText}) {
     return InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -135,7 +134,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     controller: _emailController,
                     validator: (value) => validateEmail(value, _firstTime),
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    
                     onSaved: (newValue) {
                       _email = newValue!;
                     },
@@ -145,7 +143,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     decoration: _textFieldDecoration(labelText: 'Email'),
                   ),
                 ),
-
                 const SizedBox(height: 36),
                 ElevatedButton(
                   onPressed: () {

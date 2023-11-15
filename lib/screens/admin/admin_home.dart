@@ -32,13 +32,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   void getStuff() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    
+
     if (auth.currentUser == null) {
       Navigator.pushNamedAndRemoveUntil(context, '/intro', (route) => false);
     }
     User user = auth.currentUser!;
     String uid = user.uid;
-    
+
     await firestore.collection("Customer").doc(uid).get().then((value) {
       setState(() {
         _userData = value.data()!;
@@ -71,7 +71,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       return 'Good Afternoon';
     }
     return 'Good Evening';
-  } 
+  }
 
   void cleanup({bool isEdit = false}) {
     _nameController.clear();
@@ -80,7 +80,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     _imageController.clear();
     setState(() {
       _itemImage = null;
-      if(isEdit) selectedItems.clear();
+      if (isEdit) selectedItems.clear();
     });
 
     Navigator.pop(context);
@@ -108,7 +108,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         child: Ink.image(
                           fit: BoxFit.cover,
                           image: (_itemImage == null)
-                              ? const AssetImage('assets/images/startup_logo.png')
+                              ? const AssetImage(
+                                  'assets/images/startup_logo.png')
                               : FileImage(_itemImage!) as ImageProvider,
                           width: 100,
                           height: 100,
@@ -164,9 +165,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     String name = _nameController.text;
-                    double price = double.tryParse(_priceController.text) ?? 0.0;
+                    double price =
+                        double.tryParse(_priceController.text) ?? 0.0;
                     String category = _categoryController.text;
-                    
+
                     try {
                       await FirebaseFirestore.instance.collection("Menu").add({
                         "name": name,
@@ -187,7 +189,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                     } catch (e) {
                       // log the error
                     }
-                    
+
                     cleanup();
                   },
                   child: const Text('Add Item'),
@@ -320,9 +322,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     String name = _nameController.text;
-                    double price = double.tryParse(_priceController.text) ?? 0.0;
+                    double price =
+                        double.tryParse(_priceController.text) ?? 0.0;
                     String category = _categoryController.text;
-                    
+
                     try {
                       await FirebaseFirestore.instance
                           .collection("Menu")
@@ -351,7 +354,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                     } catch (e) {
                       // log the error
                     }
-                    
+
                     cleanup(isEdit: true);
                   },
                   child: const Text('Modify Item'),
@@ -461,8 +464,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                               .withOpacity(0.7),
                         ),
                   ),
-                  contentPadding:
-                      const EdgeInsets.only(top: 0, bottom: 0, left: 20, right: 15),
+                  contentPadding: const EdgeInsets.only(
+                      top: 0, bottom: 0, left: 20, right: 15),
                   trailing: InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, '/details');

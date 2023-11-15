@@ -401,7 +401,8 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                           MaterialStateProperty.all(
                                               Theme.of(context).primaryColor),
                                       padding: MaterialStateProperty.all(
-                                          const EdgeInsets.symmetric(horizontal: 20)),
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 20)),
                                       textStyle: MaterialStateProperty.all(
                                         Theme.of(context)
                                             .textTheme
@@ -425,7 +426,8 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                           MaterialStateProperty.all(
                                               Theme.of(context).primaryColor),
                                       padding: MaterialStateProperty.all(
-                                          const EdgeInsets.symmetric(horizontal: 20)),
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 20)),
                                       textStyle: MaterialStateProperty.all(
                                         Theme.of(context)
                                             .textTheme

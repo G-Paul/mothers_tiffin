@@ -51,7 +51,8 @@ class _SignInScreenState extends State<SignInScreen> {
           }
         });
         if (userType == 'admin') {
-          Navigator.pushNamedAndRemoveUntil(context, '/admin_home', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/admin_home', (route) => false);
         } else {
           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
         }
