@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isCartEmpty = true;
   Map<String, dynamic> _userData = {};
-  final Map<String, dynamic> _selectedItems = {};
+  final Map<String, Map<String, num>> _selectedItems = {};
 
   void getStuff() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -47,11 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void changeCart(id, price, inc) {
     setState(() {
       if (_selectedItems.containsKey(id)) {
-        _selectedItems[id]['quantity'] += inc;
+        _selectedItems[id]!['quantity'] =
+            (_selectedItems[id]!['quantity'] ?? 0) + inc;
       } else {
-        _selectedItems[id] = {'quantity': 1, 'price;': price};
+        _selectedItems[id] = {'quantity': 1, 'price': price};
       }
-      if (_selectedItems[id]['quantity'] == 0) {
+      if (_selectedItems[id]!['quantity'] == 0) {
         _selectedItems.remove(id);
       }
       _isCartEmpty = _selectedItems.isEmpty;
@@ -193,11 +194,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         price: item['price'].toDouble(),
                                         imageUrl: item['image_url'],
                                         changeCart: changeCart,
-                                        quantity:
-                                            _selectedItems[item['id']] != null
-                                                ? _selectedItems[item['id']]
-                                                    ['quantity']
-                                                : 0,
+                                        quantity: _selectedItems[item['id']]
+                                                ?['quantity'] ??
+                                            0,
                                       ))
                                   .toList(),
                             ),
