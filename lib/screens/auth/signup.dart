@@ -31,8 +31,8 @@ class _SignInScreenState extends State<SignUpScreen> {
   String _userName = '';
   String _password = '';
   String _phoneNumber = '';
-  String? _signUpState = null;
-  File? _profileImage = null;
+  String? _signUpState;
+  File? _profileImage;
 
   void _pickImage({required ImageSource source}) async {
     await ImagePicker()
@@ -84,9 +84,7 @@ class _SignInScreenState extends State<SignUpScreen> {
           .createUserWithEmailAndPassword(
         email: _email,
         password: _password,
-      )
-          .then((value) async {
-        print(value);
+      ).then((value) async {
         setState(() {
           _signUpState = "Creating Profile...";
         });
@@ -144,7 +142,6 @@ class _SignInScreenState extends State<SignUpScreen> {
         _signUpState = "Error occurred!!!";
         _isLoading = false;
       });
-      print(e);
     } finally {}
   }
 
@@ -199,7 +196,6 @@ class _SignInScreenState extends State<SignUpScreen> {
     );
   }
 
-  //A dialog box that returns a text. Dialog box contains a text field and two buttons OK and Cancel
   Future<String?> showTextDialog(
       {required BuildContext context,
       required String title,
@@ -247,9 +243,7 @@ class _SignInScreenState extends State<SignUpScreen> {
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
-        //remove default back button
         automaticallyImplyLeading: false,
-        //add a custom text button to the left of the appbar with the label back
         leadingWidth: 100,
         leading: TextButton(
           onPressed: () {
@@ -280,11 +274,10 @@ class _SignInScreenState extends State<SignUpScreen> {
                   'Sign Up',
                   style: GoogleFonts.neonderthaw(
                     fontSize: 40,
-                    // fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Stack(
                   children: [
                     ClipOval(
@@ -298,13 +291,6 @@ class _SignInScreenState extends State<SignUpScreen> {
                               : FileImage(_profileImage!) as ImageProvider,
                           width: 100,
                           height: 100,
-                          // child: InkWell(
-                          //   splashColor: Theme.of(context)
-                          //       .colorScheme
-                          //       .primary
-                          //       .withOpacity(0.2),
-                          //   onTap: () {},
-                          // ),
                         ),
                       ),
                     ),
@@ -341,19 +327,13 @@ class _SignInScreenState extends State<SignUpScreen> {
                   ],
                 ),
                 const SizedBox(height: 10),
-
-                // const SizedBox(height: 20),
-
-                //Text form fields to input email id and password
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: TextFormField(
-                    // obscureText: true,
                     controller: _emailController,
                     validator: (value) => validateEmail(value, _firstTime),
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    // onChanged: (_) => _formKey.currentState!.validate(),
                     onSaved: (newValue) {
                       _email = newValue!;
                     },
@@ -367,7 +347,6 @@ class _SignInScreenState extends State<SignUpScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: TextFormField(
-                    // obscureText: true,
                     controller: _usernameController,
                     validator: (value) {
                       if (_firstTime) return null;
@@ -380,12 +359,9 @@ class _SignInScreenState extends State<SignUpScreen> {
                       return null;
                     },
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    // onChanged: (_) => _formKey.currentState!.validate(),
                     onSaved: (newValue) {
                       _userName = newValue!;
                     },
-                    // keyboardType: TextInputType.emailAddress,
-                    // autocorrect: true,
                     textCapitalization: TextCapitalization.words,
                     decoration: _textFieldDecoration(labelText: 'Username'),
                   ),
@@ -394,12 +370,10 @@ class _SignInScreenState extends State<SignUpScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: TextFormField(
-                    // obscureText: true,
                     controller: _phoneController,
                     validator: (value) =>
                         validatePhoneNumber(value, _firstTime),
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    // onChanged: (_) => _formKey.currentState!.validate(),
                     onSaved: (newValue) {
                       _phoneNumber = newValue!;
                     },
@@ -424,25 +398,6 @@ class _SignInScreenState extends State<SignUpScreen> {
                     decoration: _textFieldDecoration(labelText: 'New Password'),
                   ),
                 ),
-                // Padding(
-                //   padding:
-                //       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                //   child: TextFormField(
-                //     obscureText: true,
-                //     controller: _pwVerifyController,
-                //     validator: (value) => validateVerifyPassword(
-                //         value, _pwController.text, _firstTime),
-                //     onEditingComplete: () => FocusScope.of(context).unfocus(),
-                //     // onSaved: (newValue) {
-                //     //   _password = newValue!;
-                //     // },
-                //     keyboardType: TextInputType.visiblePassword,
-                //     autocorrect: false,
-                //     decoration:
-                //         _textFieldDecoration(labelText: 'Verify Password'),
-                //   ),
-                // ),
-                // // Form fields for email and password, with outlinedborder
                 const SizedBox(height: 16),
                 _signUpState == null
                     ? const SizedBox(height: 30)
@@ -505,8 +460,8 @@ String? validateEmail(String? value, bool firstTime) {
   if (!firstTime && (value == null || value.isEmpty)) {
     return 'Email is required';
   }
-  const String regex_pattern = r'\w+@\w+\.\w+';
-  RegExp regex = RegExp(regex_pattern);
+  const String regexPattern = r'\w+@\w+\.\w+';
+  RegExp regex = RegExp(regexPattern);
   if (!firstTime && !regex.hasMatch(value!)) {
     return 'Invalid Email';
   }
@@ -557,10 +512,10 @@ Future<ImageSource?> showImageSource(BuildContext context) async {
         actions: [
           CupertinoActionSheetAction(
               onPressed: () => Navigator.of(context).pop(ImageSource.camera),
-              child: Text("Camera")),
+              child: const Text("Camera")),
           CupertinoActionSheetAction(
               onPressed: () => Navigator.of(context).pop(ImageSource.gallery),
-              child: Text("Gallery")),
+              child: const Text("Gallery")),
         ],
       ),
     );
@@ -578,7 +533,7 @@ Future<ImageSource?> showImageSource(BuildContext context) async {
                     color: Theme.of(context).colorScheme.primary,
                     size: 20,
                   ),
-                  title: Text("Camera"),
+                  title: const Text("Camera"),
                   onTap: () => Navigator.of(context).pop(ImageSource.camera),
                 ),
                 ListTile(
@@ -588,7 +543,7 @@ Future<ImageSource?> showImageSource(BuildContext context) async {
                     color: Theme.of(context).colorScheme.primary,
                     size: 20,
                   ),
-                  title: Text("Gallery"),
+                  title: const Text("Gallery"),
                   onTap: () => Navigator.of(context).pop(ImageSource.gallery),
                 ),
               ],

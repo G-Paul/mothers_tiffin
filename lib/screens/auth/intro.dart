@@ -24,7 +24,6 @@ class _AuthScreenState extends State<AuthScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //Add logo from assets/images/chatterly.png
             Image.asset(
               'assets/images/startup_logo.png',
               width: 250,
@@ -34,7 +33,6 @@ class _AuthScreenState extends State<AuthScreen> {
               'Mother\'s',
               style: GoogleFonts.neonderthaw(
                 fontSize: 68,
-                // fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
@@ -43,42 +41,32 @@ class _AuthScreenState extends State<AuthScreen> {
               'Kitchen',
               style: GoogleFonts.neonderthaw(
                 fontSize: 48,
-                // fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.secondary,
               ),
             ),
-            // const SizedBox(height: 10),
-            // Text(
-            //   'a simple chat app',
-            //   style: TextStyle(
-            //     fontSize: 24,
-            //     fontWeight: FontWeight.bold,
-            //     color: Theme.of(context).colorScheme.secondary,
-            //   ),
-            // ),
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/signin');
               },
-              child: const Text('Sign In'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 minimumSize: const Size(150, 50),
               ),
+              child: const Text('Sign In'),
             ),
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/signup');
               },
-              child: const Text('Sign Up'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.secondary,
                 foregroundColor: Theme.of(context).colorScheme.onSecondary,
                 minimumSize: const Size(150, 50),
               ),
+              child: const Text('Sign Up'),
             ),
           ],
         ),
@@ -86,10 +74,3 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 }
-
-/*
-Fonts for chatterly: 
-- italianno - 78
-- neonderthaw - 58
-
-*/

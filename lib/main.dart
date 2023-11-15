@@ -33,7 +33,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
   final String userType;
-  MyApp({required this.isLoggedIn, required this.userType, super.key});
+  const MyApp({required this.isLoggedIn, required this.userType, super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -44,28 +44,26 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       routes: {
-        '/home': (context) => HomeScreen(),
-        '/admin_home': (context) => AdminHomeScreen(),
-        '/intro': (context) => AuthScreen(),
-        '/signin': (context) => SignInScreen(),
-        '/signup': (context) => SignUpScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/admin_home': (context) => const AdminHomeScreen(),
+        '/intro': (context) => const AuthScreen(),
+        '/signin': (context) => const SignInScreen(),
+        '/signup': (context) => const SignUpScreen(),
         '/pwreset': (context) => const ResetPasswordScreen(),
-        '/details': (context) => MenuDetailsScreen(),
+        '/details': (context) => const MenuDetailsScreen(),
       },
       home: (FirebaseAuth.instance.currentUser != null)
-          ? GetScreen(userType)
-          : AuthScreen(),
+          ? getScreen(userType)
+          : const AuthScreen(),
     );
   }
 }
 
-Widget GetScreen(String userType) {
+Widget getScreen(String userType) {
   switch (userType) {
-    // case 'admin':
-    //   return MainScreen();
     case 'admin':
-      return AdminHomeScreen();
+      return const AdminHomeScreen();
     default:
-      return HomeScreen();
+      return const HomeScreen();
   }
 }

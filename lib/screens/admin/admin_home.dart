@@ -1,21 +1,12 @@
-//blank screen
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'dart:io';
 
-import 'dart:ffi';
-
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'package:flutter/material.dart';
 
 import 'admin_listtile.dart';
 
@@ -27,7 +18,6 @@ class AdminHomeScreen extends StatefulWidget {
 }
 
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
-  bool _isCartEmpty = false;
   Map<String, dynamic> _userData = {};
   List<String> selectedItems = [];
 
@@ -35,41 +25,23 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _imageController = TextEditingController();
-  File? _itemImage = null;
-  List<Map<String, dynamic>> _itemData = [];
-
-  final dummyList = [
-    "hello",
-    "world",
-    "mars",
-    "jupiter",
-    "saturn",
-    "uranus",
-    "neptune",
-    "pluto"
-  ];
+  File? _itemImage;
 
   void getStuff() async {
-    //initialise the firebase instance
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    FirebaseStorage _storage = FirebaseStorage.instance;
-    //get the current user
-    if (_auth.currentUser == null) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    
+    if (auth.currentUser == null) {
       Navigator.pushNamedAndRemoveUntil(context, '/intro', (route) => false);
     }
-    User user = _auth.currentUser!;
-    //get the user id
+    User user = auth.currentUser!;
     String uid = user.uid;
-    //get the user data
-    await _firestore.collection("Customer").doc(uid).get().then((value) {
+    
+    await firestore.collection("Customer").doc(uid).get().then((value) {
       setState(() {
         _userData = value.data()!;
       });
     });
-    print(
-        "-------------------------------------------------------------------------------------------------------------------------------");
-    print(_userData);
   }
 
   void _pickImage({required ImageSource source}) async {
@@ -88,10 +60,34 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     });
   }
 
+  String greet() {
+    var hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Good Morning';
+    }
+    if (hour < 17) {
+      return 'Good Afternoon';
+    }
+    return 'Good Evening';
+  } 
+
+  void cleanup({bool isEdit = false}) {
+    _nameController.clear();
+    _priceController.clear();
+    _categoryController.clear();
+    _imageController.clear();
+    setState(() {
+      _itemImage = null;
+      if(isEdit) selectedItems.clear();
+    });
+
+    Navigator.pop(context);
+  }
+
   void addItem() {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // This ensures that the entire modal rises up
+      isScrollControlled: true,
       builder: (context) {
         return SingleChildScrollView(
           padding: EdgeInsets.only(
@@ -110,8 +106,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         child: Ink.image(
                           fit: BoxFit.cover,
                           image: (_itemImage == null)
-                              ? const AssetImage(
-                                  'assets/images/startup_logo.png')
+                              ? const AssetImage('assets/images/startup_logo.png')
                               : FileImage(_itemImage!) as ImageProvider,
                           width: 100,
                           height: 100,
@@ -152,28 +147,24 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 ),
                 TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Name'),
+                  decoration: const InputDecoration(labelText: 'Name'),
                 ),
                 TextFormField(
                   controller: _priceController,
-                  decoration: InputDecoration(labelText: 'Price'),
+                  decoration: const InputDecoration(labelText: 'Price'),
                   keyboardType: TextInputType.number,
                 ),
                 TextFormField(
                   controller: _categoryController,
-                  decoration: InputDecoration(labelText: 'Category'),
+                  decoration: const InputDecoration(labelText: 'Category'),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
-                    // Validate and save the data
                     String name = _nameController.text;
-                    double price =
-                        double.tryParse(_priceController.text) ?? 0.0;
+                    double price = double.tryParse(_priceController.text) ?? 0.0;
                     String category = _categoryController.text;
-                    print("Name: $name\nPrice: $price\nCategory: $category\n");
-                    // Implement your logic to add the item to the data source
-                    // For example, you can use Firestore to add the item
+                    
                     try {
                       await FirebaseFirestore.instance.collection("Menu").add({
                         "name": name,
@@ -182,8 +173,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       }).then((value) async {
                         await FirebaseStorage.instance
                             .ref('menu_images/${value.id}.jpg')
-                            .putFile(
-                                _itemImage!); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!image null ho skta hai
+                            .putFile(_itemImage!); //notNull
                         String downloadURL = await FirebaseStorage.instance
                             .ref('menu_images/${value.id}.jpg')
                             .getDownloadURL();
@@ -193,22 +183,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             .update({"image_url": downloadURL});
                       });
                     } catch (e) {
-                      print(e);
+                      // log the error
                     }
-
-                    // Clear the controllers
-                    _nameController.clear();
-                    _priceController.clear();
-                    _categoryController.clear();
-                    _imageController.clear();
-                    setState(() {
-                      _itemImage = null;
-                    });
-
-                    // Close the modal bottom sheet
-                    Navigator.pop(context);
+                    
+                    cleanup();
                   },
-                  child: Text('Add Item'),
+                  child: const Text('Add Item'),
                 ),
               ],
             ),
@@ -219,8 +199,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   }
 
   void deleteItem() {
-    // Implement your logic to delete the selected items from the data source
-    // For example, you can use Firestore to delete the items
     for (String id in selectedItems) {
       FirebaseFirestore.instance.collection("Menu").doc(id).delete();
     }
@@ -249,24 +227,19 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           setState(() {
             imageURL = itemdata["image_url"];
           });
-          // Handle the itemdata as needed
-          print(itemdata);
         } else {
-          // Handle the case when itemdata is null
-          print('Item data is null');
+          // Item data is null
         }
       } else {
         // Document does not exist
-        print('Document does not exist');
       }
     }).catchError((error) {
-      // Handle errors here
-      print('Error fetching item data: $error');
+      // Error fetching data
     });
 
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // This ensures that the entire modal rises up
+      isScrollControlled: true,
       builder: (context) {
         return SingleChildScrollView(
           padding: EdgeInsets.only(
@@ -327,31 +300,27 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 ),
                 TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Name'),
+                  decoration: const InputDecoration(labelText: 'Name'),
                   onChanged: (value) => isNameChanged = true,
                 ),
                 TextFormField(
                   controller: _priceController,
-                  decoration: InputDecoration(labelText: 'Price'),
+                  decoration: const InputDecoration(labelText: 'Price'),
                   keyboardType: TextInputType.number,
                   onChanged: (value) => isPriceChanged = true,
                 ),
                 TextFormField(
                   controller: _categoryController,
-                  decoration: InputDecoration(labelText: 'Category'),
+                  decoration: const InputDecoration(labelText: 'Category'),
                   onChanged: (value) => isCategoryChanged = true,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
-                    // Validate and save the data
                     String name = _nameController.text;
-                    double price =
-                        double.tryParse(_priceController.text) ?? 0.0;
+                    double price = double.tryParse(_priceController.text) ?? 0.0;
                     String category = _categoryController.text;
-                    print("Name: $name\nPrice: $price\nCategory: $category\n");
-                    // Implement your logic to add the item to the data source
-                    // For example, you can use Firestore to add the item
+                    
                     try {
                       await FirebaseFirestore.instance
                           .collection("Menu")
@@ -363,14 +332,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       }).then((value) async {
                         if (isImageChanged) {
                           await FirebaseStorage.instance
-                              .ref('menu_images/${id}.jpg')
+                              .ref('menu_images/$id.jpg')
                               .delete();
                           await FirebaseStorage.instance
-                              .ref('menu_images/${id}.jpg')
-                              .putFile(
-                                  _itemImage!); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!image null ho skta hai
+                              .ref('menu_images/$id.jpg')
+                              .putFile(_itemImage!); //notNull
                           String downloadURL = await FirebaseStorage.instance
-                              .ref('menu_images/${id}.jpg')
+                              .ref('menu_images/$id.jpg')
                               .getDownloadURL();
                           await FirebaseFirestore.instance
                               .collection("Menu")
@@ -379,23 +347,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         }
                       });
                     } catch (e) {
-                      print(e);
+                      // log the error
                     }
-
-                    // Clear the controllers
-                    _nameController.clear();
-                    _priceController.clear();
-                    _categoryController.clear();
-                    _imageController.clear();
-                    setState(() {
-                      _itemImage = null;
-                      selectedItems.clear();
-                    });
-
-                    // Close the modal bottom sheet
-                    Navigator.pop(context);
+                    
+                    cleanup(isEdit: true);
                   },
-                  child: Text('Modify Item'),
+                  child: const Text('Modify Item'),
                 ),
               ],
             ),
@@ -429,9 +386,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       return FloatingActionButton(
         onPressed: () {
           addItem();
-          // Add item functionality
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       );
     } else if (selectedItems.length == 1) {
       return Column(
@@ -439,28 +395,25 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         children: [
           FloatingActionButton(
             onPressed: () {
-              // Edit item functionality
               modifyItem(selectedItems[0]);
             },
-            child: Icon(Icons.edit),
+            child: const Icon(Icons.edit),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           FloatingActionButton(
             onPressed: () {
-              // Delete item functionality
               deleteItem();
             },
-            child: Icon(Icons.delete),
+            child: const Icon(Icons.delete),
           ),
         ],
       );
     } else {
       return FloatingActionButton(
         onPressed: () {
-          // Delete items functionality
           deleteItem();
         },
-        child: Icon(Icons.delete),
+        child: const Icon(Icons.delete),
       );
     }
   }
@@ -480,10 +433,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            // height: 100,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomRight: Radius.circular(50),
               ),
             ),
@@ -499,16 +451,16 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                 color: Theme.of(context).colorScheme.onPrimary,
                               )),
                   subtitle: Text(
-                    "Good Morning",
+                    greet(),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Theme.of(context)
                               .colorScheme
-                              .onPrimary!
+                              .onPrimary
                               .withOpacity(0.7),
                         ),
                   ),
                   contentPadding:
-                      EdgeInsets.only(top: 0, bottom: 0, left: 20, right: 15),
+                      const EdgeInsets.only(top: 0, bottom: 0, left: 20, right: 15),
                   trailing: InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, '/details');
@@ -536,7 +488,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           Container(
             color: Theme.of(context).primaryColor,
             child: Container(
-              // height: 500,
               padding: const EdgeInsets.symmetric(horizontal: 30),
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.background,
@@ -597,10 +548,10 @@ Future<ImageSource?> showImageSource(BuildContext context) async {
         actions: [
           CupertinoActionSheetAction(
               onPressed: () => Navigator.of(context).pop(ImageSource.camera),
-              child: Text("Camera")),
+              child: const Text("Camera")),
           CupertinoActionSheetAction(
               onPressed: () => Navigator.of(context).pop(ImageSource.gallery),
-              child: Text("Gallery")),
+              child: const Text("Gallery")),
         ],
       ),
     );
@@ -618,7 +569,7 @@ Future<ImageSource?> showImageSource(BuildContext context) async {
                     color: Theme.of(context).colorScheme.primary,
                     size: 20,
                   ),
-                  title: Text("Camera"),
+                  title: const Text("Camera"),
                   onTap: () => Navigator.of(context).pop(ImageSource.camera),
                 ),
                 ListTile(
@@ -628,7 +579,7 @@ Future<ImageSource?> showImageSource(BuildContext context) async {
                     color: Theme.of(context).colorScheme.primary,
                     size: 20,
                   ),
-                  title: Text("Gallery"),
+                  title: const Text("Gallery"),
                   onTap: () => Navigator.of(context).pop(ImageSource.gallery),
                 ),
               ],

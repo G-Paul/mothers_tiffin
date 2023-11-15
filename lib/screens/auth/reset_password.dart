@@ -28,7 +28,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             content: Text('Password reset email sent.'),
           ),
         );
-        // Navigator.pop(context);
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -48,7 +47,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   InputDecoration _textFieldDecoration(
-      {required String labelText, int minLength = 0}) {
+      {required String labelText}) {
     return InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -89,9 +88,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
-        //remove default back button
         automaticallyImplyLeading: false,
-        //add a custom text button to the left of the appbar with the label back
         leadingWidth: 100,
         leading: TextButton(
           onPressed: () {
@@ -127,7 +124,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   'Password Reset',
                   style: GoogleFonts.neonderthaw(
                     fontSize: 30,
-                    // fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
@@ -136,11 +132,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: TextFormField(
-                    // obscureText: true,
                     controller: _emailController,
                     validator: (value) => validateEmail(value, _firstTime),
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    // onChanged: (_) => _formKey.currentState!.validate(),
+                    
                     onSaved: (newValue) {
                       _email = newValue!;
                     },
@@ -151,7 +146,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ),
                 ),
 
-                // Form fields for email and password, with outlinedborder
                 const SizedBox(height: 36),
                 ElevatedButton(
                   onPressed: () {
@@ -188,8 +182,8 @@ String? validateEmail(String? value, bool firstTime) {
   if (!firstTime && (value == null || value.isEmpty)) {
     return 'Email is required';
   }
-  const String regex_pattern = r'\w+@\w+\.\w+';
-  RegExp regex = RegExp(regex_pattern);
+  const String regexPattern = r'\w+@\w+\.\w+';
+  RegExp regex = RegExp(regexPattern);
   if (!firstTime && !regex.hasMatch(value!)) {
     return 'Invalid Email';
   }

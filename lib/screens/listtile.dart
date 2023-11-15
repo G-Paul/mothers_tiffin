@@ -7,25 +7,18 @@ class ItemTile extends StatelessWidget {
   final String imageUrl;
   final double price;
   final String category;
-  final bool isSelected;
-  final Function selectItem;
   const ItemTile({
     super.key,
     required this.id,
     required this.title,
     required this.imageUrl,
     required this.price,
-    required this.category,
-    required this.selectItem,
-    this.isSelected = false,
+    required this.category
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        selectItem(id);
-      },
       child: Stack(alignment: Alignment.bottomLeft, children: [
         Container(
           height: 200,
@@ -90,36 +83,7 @@ class ItemTile extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        if (isSelected)
-          Container(
-            height: 200,
-            width: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-            ),
-          ),
-        if (isSelected)
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                ),
-              ),
-              child: Icon(
-                Icons.check,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
-          ),
+        )
       ]),
     );
   }

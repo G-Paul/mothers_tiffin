@@ -1,7 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MenuDetailsScreen extends StatefulWidget {
@@ -19,7 +18,6 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
   late String _userEmail;
   late String _phoneNumber;
   late String _photoURL;
-  // late DateTime _dob;
 
   void getUserDetails() async {
     setState(() {
@@ -35,7 +33,6 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
         _userEmail = doc.data()!['email'];
         _phoneNumber = doc.data()!['phone_number'];
         _photoURL = doc.data()!['profile_image'];
-        // _dob = DateTime.parse(formattedString)
       });
     });
     setState(() {
@@ -78,7 +75,6 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       user = FirebaseAuth.instance.currentUser!;
@@ -90,7 +86,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Modify Details"),
+          title: const Text("Modify Details"),
           foregroundColor: Theme.of(context).textTheme.titleLarge!.color,
         ),
         body: (_isLoading)
@@ -105,7 +101,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.all(20),
+                    margin: const EdgeInsets.all(20),
                     // height: 200,
                     child: CircleAvatar(
                       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -129,7 +125,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
                     validator: (value) => validateName(value),
                     onEdited: updateName,
                   ),
-                  Divider(
+                  const Divider(
                     indent: 70,
                   ),
                   // CustomDetailTile(
@@ -149,7 +145,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
                     validator: (value) => validateMobile(value),
                     onEdited: updatePhone,
                   ),
-                  Divider(
+                  const Divider(
                     indent: 70,
                   ),
                   InkWell(
@@ -157,7 +153,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
                       await FirebaseAuth.instance
                           .sendPasswordResetEmail(email: _userEmail)
                           .then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text(
                                 "Password reset email has been sent to registered email ID.")));
                       });
@@ -178,8 +174,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
-                          //name part
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +196,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
                       ),
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     indent: 70,
                   ),
                   InkWell(
@@ -227,8 +222,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
-                          //name part
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,11 +269,10 @@ class CustomDetailTile extends StatefulWidget {
 }
 
 class _CustomDetailTileState extends State<CustomDetailTile> {
-  TextEditingController _controller = TextEditingController(text: "");
+  final TextEditingController _controller = TextEditingController(text: "");
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller.text = widget.text;
   }
@@ -301,8 +294,7 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                 ),
               ),
             ),
-            SizedBox(width: 10),
-            //name part
+            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,7 +310,7 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Text(
                     widget.text,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -351,7 +343,6 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                         ),
                         child: SingleChildScrollView(
                           child: Column(
-                            // mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -368,13 +359,12 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(0.0),
                                 child: TextFormField(
-                                  // key: _formKey,
                                   validator: ((value) =>
                                       widget.validator(value)),
                                   onChanged: (_) {
@@ -386,17 +376,12 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                       .bodySmall!
                                       .copyWith(fontSize: 20),
                                   decoration: InputDecoration(
-                                      // hintText: "Hello",
-                                      // labelText: 'Email',
                                       labelStyle: Theme.of(context)
                                           .textTheme
                                           .labelSmall
                                           ?.copyWith(
                                             fontWeight: FontWeight.w600,
-                                            // color: Theme.of(context).primaryColor,
                                           ),
-                                      // hintText: 'Email',
-                                      // hintStyle: Theme.of(context).textTheme.labelSmall,
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                             color:
@@ -411,13 +396,12 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text("Cancel"),
                                     style: ButtonStyle(
                                       foregroundColor:
                                           MaterialStateProperty.all(
                                               Theme.of(context).primaryColor),
                                       padding: MaterialStateProperty.all(
-                                          EdgeInsets.symmetric(horizontal: 20)),
+                                          const EdgeInsets.symmetric(horizontal: 20)),
                                       textStyle: MaterialStateProperty.all(
                                         Theme.of(context)
                                             .textTheme
@@ -428,6 +412,7 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                                 fontWeight: FontWeight.bold),
                                       ),
                                     ),
+                                    child: const Text("Cancel"),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -435,13 +420,12 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                         widget.onEdited(_controller.value.text);
                                       }
                                     },
-                                    child: Text("Save"),
                                     style: ButtonStyle(
                                       foregroundColor:
                                           MaterialStateProperty.all(
                                               Theme.of(context).primaryColor),
                                       padding: MaterialStateProperty.all(
-                                          EdgeInsets.symmetric(horizontal: 20)),
+                                          const EdgeInsets.symmetric(horizontal: 20)),
                                       textStyle: MaterialStateProperty.all(
                                         Theme.of(context)
                                             .textTheme
@@ -452,8 +436,9 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                                 fontWeight: FontWeight.bold),
                                       ),
                                     ),
+                                    child: const Text("Save"),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   )
                                 ],
@@ -481,8 +466,8 @@ String? validateEmail(String? value) {
   if ((value == null || value.isEmpty)) {
     return 'Email is required';
   }
-  const String regex_pattern = r'\w+@\w+\.\w+';
-  RegExp regex = RegExp(regex_pattern);
+  const String regexPattern = r'\w+@\w+\.\w+';
+  RegExp regex = RegExp(regexPattern);
   if (!regex.hasMatch(value)) {
     return 'Invalid Email';
   }
@@ -497,9 +482,9 @@ String? validateName(String? value) {
 }
 
 String? validateMobile(String? value) {
-  String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-  RegExp regExp = new RegExp(patttern);
-  if (value == null || value.length == 0) {
+  String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+  RegExp regExp = RegExp(pattern);
+  if (value == null || value.isEmpty) {
     return 'Please enter mobile number';
   } else if (!regExp.hasMatch(value)) {
     return 'Please enter valid mobile number';

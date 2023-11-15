@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-//widgets
 
 final _firebaseAuth = FirebaseAuth.instance;
 
@@ -22,7 +20,7 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _firstTime = true;
   String _email = '';
   String _password = '';
-  String? _signUpState = null;
+  String? _signUpState;
   String userType = 'user';
 
   void _submit() async {
@@ -36,15 +34,14 @@ class _SignInScreenState extends State<SignInScreen> {
       await _firebaseAuth
           .signInWithEmailAndPassword(email: _email, password: _password)
           .then((value) async {
-        print(value);
-        List<dynamic> admin_ids = await FirebaseFirestore.instance
+        List<dynamic> adminIds = await FirebaseFirestore.instance
             .collection('metadata')
             .doc('admin')
             .get()
             .then((value) => value.data()!['users']);
         await SharedPreferences.getInstance().then((prefs) {
           prefs.setBool('isLoggedIn', true);
-          if (admin_ids.contains(value.user!.uid)) {
+          if (adminIds.contains(value.user!.uid)) {
             prefs.setString('userType', 'admin');
             setState(() {
               userType = 'admin';
@@ -54,8 +51,7 @@ class _SignInScreenState extends State<SignInScreen> {
           }
         });
         if (userType == 'admin') {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/admin_home', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, '/admin_home', (route) => false);
         } else {
           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
         }
@@ -141,9 +137,7 @@ class _SignInScreenState extends State<SignInScreen> {
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
-        //remove default back button
         automaticallyImplyLeading: false,
-        //add a custom text button to the left of the appbar with the label back
         leadingWidth: 100,
         leading: TextButton(
           onPressed: () {
@@ -179,11 +173,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   'Sign In',
                   style: GoogleFonts.neonderthaw(
                     fontSize: 58,
-                    // fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                // const SizedBox(height: 20),
                 _signUpState == null
                     ? const SizedBox(height: 30)
                     : SizedBox(
@@ -193,22 +185,18 @@ class _SignInScreenState extends State<SignInScreen> {
                             _signUpState!,
                             style: TextStyle(
                               fontSize: 14,
-                              // fontWeight: FontWeight.bold,
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ),
                       ),
-                //Text form fields to input email id and password
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: TextFormField(
-                    // obscureText: true,
                     controller: _emailController,
                     validator: (value) => validateEmail(value, _firstTime),
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    // onChanged: (_) => _formKey.currentState!.validate(),
                     onSaved: (newValue) {
                       _email = newValue!;
                     },
@@ -234,7 +222,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     decoration: _textFieldDecoration(labelText: 'Password'),
                   ),
                 ),
-                // Form fields for email and password, with outlinedborder
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
@@ -271,8 +258,8 @@ String? validateEmail(String? value, bool firstTime) {
   if (!firstTime && (value == null || value.isEmpty)) {
     return 'Email is required';
   }
-  const String regex_pattern = r'\w+@\w+\.\w+';
-  RegExp regex = RegExp(regex_pattern);
+  const String regexPattern = r'\w+@\w+\.\w+';
+  RegExp regex = RegExp(regexPattern);
   if (!firstTime && !regex.hasMatch(value!)) {
     return 'Invalid Email';
   }
