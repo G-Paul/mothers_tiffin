@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void changeCart(id, price, inc) {
     setState(() {
       if (_selectedItems.containsKey(id)) {
-        _selectedItems[id].quantity += inc;
+        _selectedItems[id]['quantity'] += inc;
       } else {
         _selectedItems[id] = {'quantity': 1, 'price;': price};
       }
