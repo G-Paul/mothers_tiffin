@@ -44,8 +44,7 @@ dependencies:
   google_nav_bar: ^5.0.6
   shared_preferences: ^2.2.2
   cached_network_image: ^3.3.0
-  # easy_upi_payment: ^0.1.6
-  # upi_india: ^3.0.1
+  upi_india: ^3.0.1
 
 dev_dependencies:
   flutter_test:

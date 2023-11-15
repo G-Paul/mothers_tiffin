@@ -103,7 +103,7 @@ class ItemTile extends StatelessWidget {
           ),
         if (isSelected)
           Positioned(
-            top: 20,
+            top: 0,
             right: 0,
             child: Container(
               height: 30,

@@ -86,43 +86,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     Navigator.pop(context);
   }
 
-  bool isvalidated() {
-    if (_itemImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please select an image"),
-          elevation: 10,
-        ),
-      );
-      return false;
-    } else if (_nameController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter a name"),
-          elevation: 10,
-        ),
-      );
-      return false;
-    } else if (_priceController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter a price"),
-          elevation: 10,
-        ),
-      );
-      return false;
-    } else if (_categoryController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter a category"),
-          elevation: 10,
-        ),
-      );
-      return false;
-    }
-    return true;
-  }
-
   void addItem() {
     showModalBottomSheet(
       context: context,
@@ -205,8 +168,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                     double price =
                         double.tryParse(_priceController.text) ?? 0.0;
                     String category = _categoryController.text;
-
-                    if (!isvalidated()) return;
 
                     try {
                       await FirebaseFirestore.instance.collection("Menu").add({
@@ -539,7 +500,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       const BorderRadius.only(topLeft: Radius.circular(200))),
               child: StreamBuilder(
                 stream:
-                    FirebaseFirestore.instance.collection('Menu').snapshots(),
+                    FirebaseFirestore.instance.collection("Menu").snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     return const Text('Something went wrong');
@@ -568,7 +529,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         title: data['name'],
                         price: data['price'].toDouble(),
                         category: data['category'],
-                        imageUrl: data['image_url'],
+                        imageUrl: data['image_url'] ??
+                            "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4",
                         selectItem: selectItem,
                         isSelected: selectedItems.contains(document.id),
                       );

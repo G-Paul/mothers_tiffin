@@ -8,9 +8,6 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  void handlePayment() {
-    print("hello");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +64,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ElevatedButton(
                     onPressed: () {
-                      handlePayment();
+                      double total = selectedItems.values
+                          .map((e) => e['price'] * e['quantity'])
+                          .reduce((value, element) => value + element);
+                      Navigator.pushNamed(context, '/payment',
+                            arguments: total);
                     },
                     child: const Text('Checkout'),
                   ),

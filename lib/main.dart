@@ -10,6 +10,7 @@ import 'package:mothers_tiffin/screens/auth/signup.dart';
 import 'package:mothers_tiffin/screens/home.dart';
 import 'package:mothers_tiffin/screens/user_details.dart';
 import 'package:mothers_tiffin/screens/checkout.dart';
+import 'package:mothers_tiffin/screens/payment.dart';
 import 'firebase_options.dart';
 
 import 'app_themes.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
         '/pwreset': (context) => const ResetPasswordScreen(),
         '/details': (context) => const MenuDetailsScreen(),
         '/checkout': (context) => const CheckoutScreen(),
+        '/payment': (context) => const PaymentScreen(),
       },
       home: (FirebaseAuth.instance.currentUser != null)
           ? getScreen(userType)

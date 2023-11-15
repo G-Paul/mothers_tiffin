@@ -190,7 +190,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             GridView.count(
                               shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
                               crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 0.75,
+                              scrollDirection: Axis.vertical,
                               children: categories[category]
                                   .map<Widget>((item) => ItemTile(
                                         id: item['id'],

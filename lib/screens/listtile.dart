@@ -54,9 +54,9 @@ class ItemTile extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(
-            right: 15,
+            right: 10,
             left: 10,
-            bottom: 5,
+            bottom: 10,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
