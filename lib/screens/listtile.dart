@@ -99,7 +99,7 @@ class ItemTile extends StatelessWidget {
                         },
                         child: Container(
                           height: 30,
-                          width: 30,
+                          width: 25,
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.primary,
                             borderRadius: const BorderRadius.only(
@@ -116,7 +116,7 @@ class ItemTile extends StatelessWidget {
                       InkWell(
                         child: Container(
                           height: 30,
-                          width: 30,
+                          width: 25,
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.background,
                           ),
@@ -136,7 +136,7 @@ class ItemTile extends StatelessWidget {
                         },
                         child: Container(
                           height: 30,
-                          width: 30,
+                          width: 25,
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.primary,
                             borderRadius: const BorderRadius.only(
