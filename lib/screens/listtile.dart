@@ -102,7 +102,10 @@ class ItemTile extends StatelessWidget {
                           width: 30,
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(5),
+                              bottomLeft: Radius.circular(5),
+                            ),
                           ),
                           child: Icon(
                                   Icons.remove,
@@ -110,11 +113,22 @@ class ItemTile extends StatelessWidget {
                                 ),
                         ),
                       ),
-                      Text(
-                        "$quantity",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.onPrimary,
+                      InkWell(
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.background,
+                          ),
+                          child: Center(
+                            child: Text(
+                              "$quantity",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context).colorScheme.onBackground,
+                                  ),
                             ),
+                          ),
+                        )
                       ),
                       InkWell(
                         onTap: () {
@@ -125,7 +139,10 @@ class ItemTile extends StatelessWidget {
                           width: 30,
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(5),
+                              bottomRight: Radius.circular(5),
+                            ),
                           ),
                           child: Icon(
                                   Icons.add,
