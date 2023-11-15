@@ -86,6 +86,43 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     Navigator.pop(context);
   }
 
+  bool isvalidated() {
+    if (_itemImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please select an image"),
+          elevation: 10,
+        ),
+      );
+      return false;
+    } else if (_nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please enter a name"),
+          elevation: 10,
+        ),
+      );
+      return false;
+    } else if (_priceController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please enter a price"),
+          elevation: 10,
+        ),
+      );
+      return false;
+    } else if (_categoryController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please enter a category"),
+          elevation: 10,
+        ),
+      );
+      return false;
+    }
+    return true;
+  }
+
   void addItem() {
     showModalBottomSheet(
       context: context,
@@ -168,6 +205,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                     double price =
                         double.tryParse(_priceController.text) ?? 0.0;
                     String category = _categoryController.text;
+
+                    if (!isvalidated()) return;
 
                     try {
                       await FirebaseFirestore.instance.collection("Menu").add({

@@ -14,8 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isCartEmpty = true;
   Map<String, dynamic> _userData = {};
-  final Map<String, Map<String, dynamic>> _selectedItems =
-      {}; //id: {quantity: 1, price: 100}
+  final Map<String, dynamic> _selectedItems = {};
 
   void getStuff() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -53,8 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
       int inc = 0}) {
     setState(() {
       if (_selectedItems.containsKey(id)) {
-        _selectedItems[id]!['quantity'] =
-            (_selectedItems[id]!['quantity'] ?? 0) + inc;
+        _selectedItems[id]!['quantity'] += inc;
       } else {
         _selectedItems[id] = {
           'quantity': 1,
@@ -192,12 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             GridView.count(
                               shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
                               crossAxisCount: 2,
-                              crossAxisSpacing: 40,
-                              mainAxisSpacing: 20,
-                              childAspectRatio: 0.75,
-                              scrollDirection: Axis.vertical,
                               children: categories[category]
                                   .map<Widget>((item) => ItemTile(
                                         id: item['id'],

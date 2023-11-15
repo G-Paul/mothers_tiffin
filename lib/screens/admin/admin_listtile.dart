@@ -95,7 +95,7 @@ class ItemTile extends StatelessWidget {
         if (isSelected)
           Container(
             height: 200,
-            width: 150,
+            width: 175,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
@@ -103,7 +103,7 @@ class ItemTile extends StatelessWidget {
           ),
         if (isSelected)
           Positioned(
-            top: 0,
+            top: 20,
             right: 0,
             child: Container(
               height: 30,
