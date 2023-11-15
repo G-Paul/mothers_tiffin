@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="mothers_tiffin"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:label="mothers_kitchen"
+        android:name="Mother's Kitchen"
+        android:icon="@mipmap/logo">
         <activity
             android:name=".MainActivity"
             android:exported="true"
