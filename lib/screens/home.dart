@@ -161,10 +161,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
                     data['id'] = document.id.toString();
-                    if (categories.containsKey(data['category'])) {
-                      categories[data['category']].add(data);
+                    if (categories.containsKey(data['category'].trim())) {
+                      categories[data['category'].trim()].add(data);
                     } else {
-                      categories[data['category']] = [data];
+                      categories[data['category'].trim()] = [data];
                     }
                   }
 
