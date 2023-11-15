@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+
 class ItemTile extends StatelessWidget {
   final String id;
   final String title;
@@ -76,7 +77,12 @@ class ItemTile extends StatelessWidget {
                   quantity == 0
                       ? InkWell(
                           onTap: () {
-                            changeCart(id, 1, price);
+                            changeCart(
+                                id: id,
+                                price: price,
+                                title: title,
+                                imageUrl: imageUrl,
+                                inc: 0);
                           },
                           child: Container(
                             height: 30,
@@ -95,7 +101,12 @@ class ItemTile extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: () {
-                                changeCart(id, price, -1);
+                                changeCart(
+                                    id: id,
+                                    price: price,
+                                    title: title,
+                                    imageUrl: imageUrl,
+                                    inc: -1);
                               },
                               child: Container(
                                 height: 30,
@@ -137,7 +148,12 @@ class ItemTile extends StatelessWidget {
                             )),
                             InkWell(
                               onTap: () {
-                                changeCart(id, price, 1);
+                                changeCart(
+                                    id: id,
+                                    price: price,
+                                    title: title,
+                                    imageUrl: imageUrl,
+                                    inc: 1);
                               },
                               child: Container(
                                 height: 30,

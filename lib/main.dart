@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       title: 'Mother\'s Tiffin',
       theme: LightThemes.theme1,
       darkTheme: DarkThemes.theme1,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
       routes: {
         '/home': (context) => const HomeScreen(),

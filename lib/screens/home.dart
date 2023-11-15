@@ -14,7 +14,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isCartEmpty = true;
   Map<String, dynamic> _userData = {};
-  final Map<String, Map<String, num>> _selectedItems = {};
+  final Map<String, Map<String, dynamic>> _selectedItems =
+      {}; //id: {quantity: 1, price: 100}
 
   void getStuff() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -44,13 +45,23 @@ class _HomeScreenState extends State<HomeScreen> {
     return 'Good Evening';
   }
 
-  void changeCart(id, price, inc) {
+  void changeCart(
+      {required String id,
+      required String title,
+      required String imageUrl,
+      required num price,
+      int inc = 0}) {
     setState(() {
       if (_selectedItems.containsKey(id)) {
         _selectedItems[id]!['quantity'] =
             (_selectedItems[id]!['quantity'] ?? 0) + inc;
       } else {
-        _selectedItems[id] = {'quantity': 1, 'price': price};
+        _selectedItems[id] = {
+          'quantity': 1,
+          'price': price,
+          'title': title,
+          'imageURL': imageUrl
+        };
       }
       if (_selectedItems[id]!['quantity'] == 0) {
         _selectedItems.remove(id);
