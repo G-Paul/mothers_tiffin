@@ -95,7 +95,7 @@ class ItemTile extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: () {
-                                changeCart(id, -1);
+                                changeCart(id, -1, price);
                               },
                               child: Container(
                                 height: 30,
@@ -137,7 +137,7 @@ class ItemTile extends StatelessWidget {
                             )),
                             InkWell(
                               onTap: () {
-                                changeCart(id, 1);
+                                changeCart(id, 1, price);
                               },
                               child: Container(
                                 height: 30,

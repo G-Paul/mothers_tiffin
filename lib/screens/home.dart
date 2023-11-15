@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isCartEmpty = true;
   Map<String, dynamic> _userData = {};
-  Map<String, dynamic> _selectedItems = {};
+  final Map<String, dynamic> _selectedItems = {};
 
   void getStuff() async {
     FirebaseAuth auth = FirebaseAuth.instance;
