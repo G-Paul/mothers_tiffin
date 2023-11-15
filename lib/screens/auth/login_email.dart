@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -96,7 +98,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   InputDecoration _textFieldDecoration(
-      {required String labelText, int minLength = 0}) {
+      {required String labelText}) {
     return InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
       floatingLabelBehavior: FloatingLabelBehavior.auto,

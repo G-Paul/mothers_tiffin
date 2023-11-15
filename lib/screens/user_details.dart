@@ -41,7 +41,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
   }
 
   void updateName(String newName) async {
-    while (_isUpdating);
+    while (_isUpdating) {}
     setState(() {
       _isUpdating = true;
     });
@@ -58,7 +58,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
   }
 
   void updatePhone(String newPhone) async {
-    while (_isUpdating);
+    while (_isUpdating) {}
     setState(() {
       _isUpdating = true;
     });
@@ -339,7 +339,7 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                             MediaQuery.of(context).viewInsets.bottom +
                             10,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).colorScheme.background,
                         ),
                         child: SingleChildScrollView(
                           child: Column(

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -161,7 +163,7 @@ class _SignInScreenState extends State<SignUpScreen> {
   }
 
   InputDecoration _textFieldDecoration(
-      {required String labelText, int minLength = 0}) {
+      {required String labelText}) {
     return InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -205,7 +207,7 @@ class _SignInScreenState extends State<SignUpScreen> {
       required String cancelText,
       required String okText,
       bool obscure = false}) async {
-    final TextEditingController _textController = TextEditingController();
+    final TextEditingController textController = TextEditingController();
     return showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
@@ -219,7 +221,7 @@ class _SignInScreenState extends State<SignUpScreen> {
         ),
         content: TextFormField(
             obscureText: obscure,
-            controller: _textController,
+            controller: textController,
             decoration: InputDecoration(
               hintText: hintText,
               labelText: labelText,
@@ -230,7 +232,7 @@ class _SignInScreenState extends State<SignUpScreen> {
             child: Text(cancelText),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pop(_textController.text),
+            onPressed: () => Navigator.of(context).pop(textController.text),
             child: Text(okText),
           ),
         ],
@@ -497,8 +499,8 @@ String? validatePhoneNumber(String? value, bool firstTime) {
   if (!firstTime && (value == null || value.isEmpty)) {
     return 'Phone Number is required';
   }
-  const String regex_pattern = r'^[0-9]{10}$';
-  RegExp regex = RegExp(regex_pattern);
+  const String regexPattern = r'^[0-9]{10}$';
+  RegExp regex = RegExp(regexPattern);
   if (!firstTime && !regex.hasMatch(value!)) {
     return 'Invalid Phone Number';
   }
