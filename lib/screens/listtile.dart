@@ -6,14 +6,16 @@ class ItemTile extends StatelessWidget {
   final String title;
   final String imageUrl;
   final double price;
-  final String category;
+  final Function changeCart;
+  final num quantity;
   const ItemTile({
     super.key,
     required this.id,
     required this.title,
     required this.imageUrl,
     required this.price,
-    required this.category
+    required this.changeCart,
+    required this.quantity,
   });
 
   @override
@@ -66,19 +68,72 @@ class ItemTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    category,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(0.8),
-                        ),
-                  ),
-                  Text(
                     "₹ $price",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
+                  ),
+                  quantity == 0 ?
+                  InkWell(
+                    onTap: () {
+                      changeCart(id, 1);
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Icon(
+                              Icons.add_shopping_cart,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                    ),
+                  ) :
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          changeCart(id, -1);
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Icon(
+                                  Icons.remove,
+                                  color: Theme.of(context).colorScheme.onPrimary,
+                                ),
+                        ),
+                      ),
+                      Text(
+                        "$quantity",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          changeCart(id, 1);
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Icon(
+                                  Icons.add,
+                                  color: Theme.of(context).colorScheme.onPrimary,
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

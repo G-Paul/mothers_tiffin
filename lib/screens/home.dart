@@ -12,9 +12,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isCartEmpty = false;
+  bool _isCartEmpty = true;
   Map<String, dynamic> _userData = {};
-  List<String> selectedItems = [];
+  Map<String, num> selectedItems = {};
 
   void getStuff() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -42,6 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
       return 'Good Afternoon';
     }
     return 'Good Evening';
+  }
+
+  void changeCart(id, inc) {
+    setState(() {
+      selectedItems[id] = (selectedItems[id] ?? 0) + inc;
+      if (selectedItems[id] == 0) {
+        selectedItems.remove(id);
+      }
+      _isCartEmpty = selectedItems.isEmpty;
+    });
   }
 
   @override
@@ -178,8 +188,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         id: item['id'],
                                         title: item['name'],
                                         price: item['price'].toDouble(),
-                                        category: item['category'],
                                         imageUrl: item['image_url'],
+                                        changeCart: changeCart,
+                                        quantity: selectedItems[item['id']] ?? 0,
                                       ))
                                   .toList(),
                             ),
@@ -204,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Theme.of(context).colorScheme.primary,
               child: Center(
                 child: Text(
-                  "2 items in cart",
+                  "${selectedItems.length} items in cart",
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.onPrimary),
                 ),
