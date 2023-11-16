@@ -165,6 +165,11 @@ class _SignInScreenState extends State<SignUpScreen> {
     return InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
+      floatingLabelStyle: TextStyle(
+        color: Theme.of(context).colorScheme.secondary,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
       enabledBorder: OutlineInputBorder(
         borderRadius: const BorderRadius.all(
           Radius.circular(20),
@@ -241,9 +246,9 @@ class _SignInScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         automaticallyImplyLeading: false,
         leadingWidth: 100,
         leading: TextButton(
@@ -253,14 +258,11 @@ class _SignInScreenState extends State<SignUpScreen> {
           child: Row(
             children: [
               Icon(Icons.arrow_back_ios,
-                  color: Theme.of(context).colorScheme.primary, size: 15),
-              Text(
-                'Back',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 15,
-                ),
-              ),
+                  color: Theme.of(context).colorScheme.secondary, size: 15),
+              Text('Back',
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      )),
             ],
           ),
         ),
@@ -273,9 +275,9 @@ class _SignInScreenState extends State<SignUpScreen> {
               children: [
                 Text(
                   'Sign Up',
-                  style: GoogleFonts.neonderthaw(
+                  style: GoogleFonts.macondo(
                     fontSize: 40,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -305,7 +307,7 @@ class _SignInScreenState extends State<SignUpScreen> {
                           color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.surface,
                               width: 3,
                               strokeAlign: BorderSide.strokeAlignOutside),
                         ),
@@ -444,7 +446,7 @@ class _SignInScreenState extends State<SignUpScreen> {
                         }
                       : null,
                   style: TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.secondary,
                   ),
                   child: const Text('Have an account? Sign In'),
                 ),

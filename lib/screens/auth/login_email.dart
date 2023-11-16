@@ -100,6 +100,11 @@ class _SignInScreenState extends State<SignInScreen> {
     return InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
+      floatingLabelStyle: TextStyle(
+        color: Theme.of(context).colorScheme.secondary,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
       enabledBorder: OutlineInputBorder(
         borderRadius: const BorderRadius.all(
           Radius.circular(20),
@@ -135,9 +140,9 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         automaticallyImplyLeading: false,
         leadingWidth: 100,
         leading: TextButton(
@@ -147,12 +152,13 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Row(
             children: [
               Icon(Icons.arrow_back_ios,
-                  color: Theme.of(context).colorScheme.primary, size: 15),
+                  color: Theme.of(context).colorScheme.secondary, size: 15),
               Text(
                 'Back',
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 15,
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
@@ -172,9 +178,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 const SizedBox(height: 10),
                 Text(
                   'Sign In',
-                  style: GoogleFonts.neonderthaw(
+                  style: GoogleFonts.macondo(
                     fontSize: 58,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
                 _signUpState == null
@@ -242,9 +248,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 TextButton(
                   onPressed: () => Navigator.pushNamed(context, '/pwreset'),
                   style: TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.secondary,
                   ),
-                  child: const Text('Forgot Password?'),
+                  child: const Text(
+                    'Forgot Password?',
+                  ),
                 ),
               ],
             ),

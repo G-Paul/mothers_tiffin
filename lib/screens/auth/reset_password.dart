@@ -50,6 +50,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     return InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
+      floatingLabelStyle: TextStyle(
+        color: Theme.of(context).colorScheme.secondary,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
       enabledBorder: OutlineInputBorder(
         borderRadius: const BorderRadius.all(
           Radius.circular(20),
@@ -84,9 +89,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         automaticallyImplyLeading: false,
         leadingWidth: 100,
         leading: TextButton(
@@ -96,13 +101,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           child: Row(
             children: [
               Icon(Icons.arrow_back_ios,
-                  color: Theme.of(context).colorScheme.primary, size: 15),
+                  color: Theme.of(context).colorScheme.secondary, size: 15),
               Text(
                 'Back',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 15,
-                ),
+                style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
               ),
             ],
           ),
@@ -121,9 +125,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 const SizedBox(height: 10),
                 Text(
                   'Password Reset',
-                  style: GoogleFonts.neonderthaw(
+                  style: GoogleFonts.macondo(
                     fontSize: 30,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -162,7 +166,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
                   style: TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.secondary,
                   ),
                   child: const Text('Go Back'),
                 ),

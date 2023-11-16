@@ -12,11 +12,11 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(0),
         child: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           elevation: 0,
         ),
       ),
@@ -28,18 +28,19 @@ class _AuthScreenState extends State<AuthScreen> {
               'assets/images/startup_logo.png',
               width: 250,
             ),
-            const SizedBox(height: 10),
+            // const SizedBox(height: 10),
             Text(
               'Mother\'s',
-              style: GoogleFonts.neonderthaw(
+              style: GoogleFonts.macondo(
                 fontSize: 68,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 10),
+            // const SizedBox(height: 10),
             Text(
               'Kitchen',
-              style: GoogleFonts.neonderthaw(
+              style: GoogleFonts.macondo(
                 fontSize: 48,
                 color: Theme.of(context).colorScheme.secondary,
               ),
