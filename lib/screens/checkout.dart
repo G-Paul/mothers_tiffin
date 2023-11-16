@@ -8,14 +8,11 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  void handlePayment() {
-    print("hello");
-  }
 
   @override
   Widget build(BuildContext context) {
-    final _selectedItems = ModalRoute.of(context)!.settings.arguments
-        as Map<String, Map<String, dynamic>>;
+    final selectedItems =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     return Scaffold(
       appBar: AppBar(
@@ -28,18 +25,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: _selectedItems.length,
+                itemCount: selectedItems.length,
                 itemBuilder: (context, index) {
-                  final _key = _selectedItems.keys.elementAt(index);
+                  final key = selectedItems.keys.elementAt(index);
                   return ListTile(
-                    title: Text(_selectedItems[_key]!['title']),
+                    title: Text(selectedItems[key]!['title']),
                     subtitle: Text(
-                        "${_selectedItems[_key]!['quantity'].toString()} x ₹${_selectedItems[_key]!['price'].toStringAsFixed(2)}"),
+                        "${selectedItems[key]!['quantity'].toString()} x ₹${selectedItems[key]!['price'].toStringAsFixed(2)}"),
                     trailing: Text(
-                        '₹${(_selectedItems[_key]!['price'] * _selectedItems[_key]!['quantity']).toStringAsFixed(2)}'),
+                        '₹${(selectedItems[key]!['price'] * selectedItems[key]!['quantity']).toStringAsFixed(2)}'),
                     leading: CircleAvatar(
                       backgroundImage:
-                          NetworkImage(_selectedItems[_key]!['imageURL']),
+                          NetworkImage(selectedItems[key]!['imageURL']),
                     ),
                   );
                 },
@@ -56,7 +53,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    'Total: ₹${_selectedItems.values.map((e) => e['price'] * e['quantity']).reduce((value, element) => value + element).toStringAsFixed(2)}',
+                    'Total: ₹${selectedItems.values.map((e) => e['price'] * e['quantity']).reduce((value, element) => value + element).toStringAsFixed(2)}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -67,8 +64,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ElevatedButton(
                     onPressed: () {
-                      print("Hello");
-                      handlePayment();
+                      double total = selectedItems.values
+                          .map((e) => e['price'] * e['quantity'])
+                          .reduce((value, element) => value + element);
+                      Navigator.pushNamed(context, '/payment',
+                            arguments: total);
                     },
                     child: const Text('Checkout'),
                   ),

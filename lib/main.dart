@@ -2,20 +2,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:mothers_tiffin/screens/admin/admin_home.dart';
+import 'package:mothers_kitchen/screens/admin/admin_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mothers_tiffin/screens/auth/intro.dart';
-import 'package:mothers_tiffin/screens/auth/reset_password.dart';
-import 'package:mothers_tiffin/screens/auth/signup.dart';
-import 'package:mothers_tiffin/screens/home.dart';
-import 'package:mothers_tiffin/screens/user_details.dart';
-import 'package:mothers_tiffin/screens/checkout.dart';
+import 'package:mothers_kitchen/screens/auth/intro.dart';
+import 'package:mothers_kitchen/screens/auth/reset_password.dart';
+import 'package:mothers_kitchen/screens/auth/signup.dart';
+import 'package:mothers_kitchen/screens/home.dart';
+import 'package:mothers_kitchen/screens/user_details.dart';
+import 'package:mothers_kitchen/screens/checkout.dart';
+import 'package:mothers_kitchen/screens/payment.dart';
 import 'firebase_options.dart';
 
 import 'app_themes.dart';
 
 //screens
-import 'package:mothers_tiffin/screens/auth/login_email.dart';
+import 'package:mothers_kitchen/screens/auth/login_email.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
         '/pwreset': (context) => const ResetPasswordScreen(),
         '/details': (context) => const MenuDetailsScreen(),
         '/checkout': (context) => const CheckoutScreen(),
+        '/payment': (context) => const PaymentScreen(),
       },
       home: (FirebaseAuth.instance.currentUser != null)
           ? getScreen(userType)

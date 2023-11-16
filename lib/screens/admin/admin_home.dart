@@ -500,7 +500,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       const BorderRadius.only(topLeft: Radius.circular(200))),
               child: StreamBuilder(
                 stream:
-                    FirebaseFirestore.instance.collection('Menu').snapshots(),
+                    FirebaseFirestore.instance.collection("Menu").snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     return const Text('Something went wrong');
@@ -529,7 +529,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         title: data['name'],
                         price: data['price'].toDouble(),
                         category: data['category'],
-                        imageUrl: data['image_url'],
+                        imageUrl: data['image_url'] ??
+                            "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4",
                         selectItem: selectItem,
                         isSelected: selectedItems.contains(document.id),
                       );

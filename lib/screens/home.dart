@@ -14,8 +14,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isCartEmpty = true;
   Map<String, dynamic> _userData = {};
-  final Map<String, Map<String, dynamic>> _selectedItems =
-      {}; //id: {quantity: 1, price: 100}
+  final Map<String, dynamic> _selectedItems = {};
 
   void getStuff() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -53,8 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
       int inc = 0}) {
     setState(() {
       if (_selectedItems.containsKey(id)) {
-        _selectedItems[id]!['quantity'] =
-            (_selectedItems[id]!['quantity'] ?? 0) + inc;
+        _selectedItems[id]!['quantity'] += inc;
       } else {
         _selectedItems[id] = {
           'quantity': 1,
@@ -163,10 +161,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
                     data['id'] = document.id.toString();
-                    if (categories.containsKey(data['category'])) {
-                      categories[data['category']].add(data);
+                    if (categories.containsKey(data['category'].trim())) {
+                      categories[data['category'].trim()].add(data);
                     } else {
-                      categories[data['category']] = [data];
+                      categories[data['category'].trim()] = [data];
                     }
                   }
 
@@ -194,8 +192,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               crossAxisCount: 2,
-                              crossAxisSpacing: 40,
-                              mainAxisSpacing: 20,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
                               childAspectRatio: 0.75,
                               scrollDirection: Axis.vertical,
                               children: categories[category]
