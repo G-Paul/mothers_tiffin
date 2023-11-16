@@ -8,13 +8,13 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-
   @override
   Widget build(BuildContext context) {
     final selectedItems =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: const Text('Checkout'),
       ),
@@ -29,11 +29,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 itemBuilder: (context, index) {
                   final key = selectedItems.keys.elementAt(index);
                   return ListTile(
-                    title: Text(selectedItems[key]!['title']),
+                    title: Text(selectedItems[key]!['title'],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        )),
                     subtitle: Text(
                         "${selectedItems[key]!['quantity'].toString()} x ₹${selectedItems[key]!['price'].toStringAsFixed(2)}"),
                     trailing: Text(
-                        '₹${(selectedItems[key]!['price'] * selectedItems[key]!['quantity']).toStringAsFixed(2)}'),
+                        '₹${(selectedItems[key]!['price'] * selectedItems[key]!['quantity']).toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        )),
                     leading: CircleAvatar(
                       backgroundImage:
                           NetworkImage(selectedItems[key]!['imageURL']),
@@ -57,6 +64,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -68,9 +76,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           .map((e) => e['price'] * e['quantity'])
                           .reduce((value, element) => value + element);
                       Navigator.pushNamed(context, '/payment',
-                            arguments: total);
+                          arguments: total);
                     },
-                    child: const Text('Checkout'),
+                    child: const Text("Checkout",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        )),
                   ),
                 ),
               ],

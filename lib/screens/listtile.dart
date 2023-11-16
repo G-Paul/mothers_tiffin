@@ -43,7 +43,7 @@ class ItemTile extends StatelessWidget {
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
               colors: [
-                Colors.black.withOpacity(0.7),
+                Colors.black.withOpacity(0.8),
                 Colors.black.withOpacity(0.6),
                 Colors.black.withOpacity(0.4),
                 Colors.black.withOpacity(0.2),
@@ -65,7 +65,8 @@ class ItemTile extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
                     ),
               ),
               Row(
@@ -74,7 +75,8 @@ class ItemTile extends StatelessWidget {
                   Text(
                     "₹ $price",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                   ),
                   quantity == 0
@@ -91,12 +93,12 @@ class ItemTile extends StatelessWidget {
                             height: 30,
                             width: 30,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: BorderRadius.circular(5),
+                              color: Theme.of(context).colorScheme.secondary,
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
                               Icons.add_shopping_cart,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         )
@@ -115,7 +117,7 @@ class ItemTile extends StatelessWidget {
                                 height: 30,
                                 width: 25,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.secondary,
                                   borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(5),
                                     bottomLeft: Radius.circular(5),
@@ -124,7 +126,7 @@ class ItemTile extends StatelessWidget {
                                 child: Icon(
                                   Icons.remove,
                                   color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                      Theme.of(context).colorScheme.onSecondary,
                                 ),
                               ),
                             ),
@@ -133,7 +135,7 @@ class ItemTile extends StatelessWidget {
                               height: 30,
                               width: 25,
                               decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.background,
+                                color: Theme.of(context).colorScheme.surface,
                               ),
                               child: Center(
                                 child: Text(
@@ -144,7 +146,8 @@ class ItemTile extends StatelessWidget {
                                       ?.copyWith(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onBackground,
+                                            .onSurface,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                 ),
                               ),
@@ -162,7 +165,7 @@ class ItemTile extends StatelessWidget {
                                 height: 30,
                                 width: 25,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: Theme.of(context).colorScheme.secondary,
                                   borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5),
@@ -171,7 +174,7 @@ class ItemTile extends StatelessWidget {
                                 child: Icon(
                                   Icons.add,
                                   color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                      Theme.of(context).colorScheme.onSecondary,
                                 ),
                               ),
                             ),
