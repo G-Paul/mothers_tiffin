@@ -75,11 +75,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ElevatedButton(
                     onPressed: () {
-                      double total = selectedItems.values
-                          .map((e) => e['price'] * e['quantity'])
-                          .reduce((value, element) => value + element);
                       Navigator.pushNamed(context, '/payment',
-                          arguments: total);
+                          arguments: selectedItems);
                     },
                     child: const Text("Checkout",
                         style: TextStyle(

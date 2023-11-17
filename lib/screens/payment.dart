@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:upi_india/upi_india.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -11,6 +13,7 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
   Future<UpiResponse>? _transaction;
   final UpiIndia _upiIndia = UpiIndia();
+  Map<String, dynamic> userData = {};
   List<UpiApp>? apps;
 
   TextStyle header = const TextStyle(
@@ -31,6 +34,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
       });
     }).catchError((e) {
       apps = [];
+    });
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        userData['username'] = prefs.getString('username') ?? '';
+        userData['email'] = prefs.getString('email') ?? '';
+        userData['profile_image'] = prefs.getString('profile_image') ?? '';
+        userData['phone_number'] = prefs.getString('phone_number') ?? '';
+      });
     });
     super.initState();
   }
@@ -74,10 +85,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
-                      color: Colors.blue.shade100,
+                      color: Theme.of(context).colorScheme.primary,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.5),
                           spreadRadius: 2,
                           blurRadius: 5,
                           offset: const Offset(0, 2),
@@ -93,13 +107,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           width: 80,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.blue.shade900,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
-                          child: const Icon(
-                            Icons.payment,
-                            size: 48,
-                            color: Colors.white,
-                          ),
+                          child: Icon(Icons.payment,
+                              size: 48,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondary
+                                  .withOpacity(0.5)),
                         ),
                         const SizedBox(height: 12.0),
                         Text(
@@ -136,19 +151,63 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-  void _checkTxnStatus(String status) {
+  void _showDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void addOrderDetail(Map<String, dynamic> selectedItems, double total,
+      String status, String txnId, String txnRef, String approvalRef) {
+    FirebaseFirestore.instance.collection('Order').add({
+      'username': userData['username'],
+      'email': userData['email'],
+      'profile_image': userData['profile_image'],
+      'phone_number': userData['phone_number'],
+      'order': selectedItems,
+      'total': total,
+      'status': status,
+      'txnId': txnId,
+      'txnRef': txnRef,
+      'approvalRef': approvalRef,
+      'timestamp': DateTime.now(),
+    }).then((value) {
+      _showDialog("Success", "Thank you for your order.");
+    }).catchError((error) {
+      _showDialog("Error", "Failed to submit order");
+    });
+  }
+
+  void _checkTxnStatus(Map<String, dynamic> selectedItems, double total,
+      String status, String txnId, String txnRef, String approvalRef) {
     switch (status) {
       case UpiPaymentStatus.SUCCESS:
-        print('Transaction Successful');
+        _showDialog("Success", "Payment Sucessful.");
+        addOrderDetail(
+            selectedItems, total, status, txnId, txnRef, approvalRef);
         break;
       case UpiPaymentStatus.SUBMITTED:
-        print('Transaction Submitted');
+        _showDialog("Pending", "Payment Pending.");
         break;
       case UpiPaymentStatus.FAILURE:
-        print('Transaction Failed');
+        _showDialog("Failure", "Payment Failed.");
         break;
       default:
-        print('Received an Unknown transaction status');
+        _showDialog("Unknown", "Payment status unknown.");
     }
   }
 
@@ -171,11 +230,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final total = ModalRoute.of(context)!.settings.arguments as num;
+    final selectedItems =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    double total = selectedItems.values
+        .map((e) => e['price'] * e['quantity'])
+        .reduce((value, element) => value + element);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: const Text("Choose UPI"),
       ),
       body: Column(
@@ -205,8 +269,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   String txnRef = upiResponse.transactionRefId ?? 'N/A';
                   String status = upiResponse.status ?? 'N/A';
                   String approvalRef = upiResponse.approvalRefNo ?? 'N/A';
-                  _checkTxnStatus(status);
-
+                  _checkTxnStatus(
+                      selectedItems, total, status, txnId, txnRef, approvalRef);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(

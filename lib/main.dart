@@ -14,6 +14,8 @@ import 'package:mothers_kitchen/screens/shared/user_details.dart';
 import 'package:mothers_kitchen/screens/checkout.dart';
 import 'package:mothers_kitchen/screens/payment.dart';
 import 'package:mothers_kitchen/screens/feedback.dart';
+import 'package:mothers_kitchen/screens/admin/get_feedback.dart';
+import 'package:mothers_kitchen/screens/admin/order_history.dart';
 import 'package:mothers_kitchen/screens/utils/cart_provider.dart';
 
 import 'firebase_options.dart';
@@ -66,6 +68,8 @@ class MyApp extends StatelessWidget {
           '/checkout': (context) => const CheckoutScreen(),
           '/payment': (context) => const PaymentScreen(),
           '/feedback': (context) => const FeedBackScreen(),
+          '/feedback_admin': (context) => const AdminFeedbackScreen(),
+          '/order_history': (context) => const OrderHistoryScreen(),
         },
         home: MyAppWrapper(userType: userType),
       ),

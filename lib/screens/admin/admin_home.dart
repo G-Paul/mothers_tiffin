@@ -21,6 +21,7 @@ class AdminHomeScreen extends StatefulWidget {
 
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   Map<String, dynamic> selectedItems = {};
+  Map<String, dynamic> userData = {};
   final String defaultImg =
       "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
 
@@ -344,45 +345,71 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     super.dispose();
   }
 
+  void confirmDelete() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Items"),
+          content:
+              const Text("Are you sure you want to delete the selected items?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                deleteItem();
+                Navigator.of(context).pop();
+              },
+              child: const Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget buildFloatingActionButton() {
-    if (selectedItems.isEmpty) {
-      return FloatingActionButton(
-        onPressed: () {
-          addItem();
-        },
-        child: const Icon(Icons.add),
-      );
-    } else if (selectedItems.length == 1) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        if (selectedItems.isEmpty)
           FloatingActionButton(
-            onPressed: () {
-              modifyItem(selectedItems.keys.first);
-            },
+            onPressed: () => addItem(),
+            child: const Icon(Icons.add),
+          ),
+        if (selectedItems.length == 1) ...[
+          FloatingActionButton(
+            onPressed: () => modifyItem(selectedItems.keys.first),
             child: const Icon(Icons.edit),
           ),
           const SizedBox(width: 16, height: 16),
+        ],
+        if (selectedItems.isNotEmpty)
           FloatingActionButton(
-            onPressed: () {
-              deleteItem();
-            },
+            onPressed: () => confirmDelete(),
             child: const Icon(Icons.delete),
           ),
-        ],
-      );
-    } else {
-      return FloatingActionButton(
-        onPressed: () {
-          deleteItem();
-        },
-        child: const Icon(Icons.delete),
-      );
-    }
+        const SizedBox(width: 16, height: 16),
+        FloatingActionButton(
+          onPressed: () => Navigator.pushNamed(context, '/order_history'),
+          child: const Icon(Icons.history),
+        ),
+        const SizedBox(width: 16, height: 16),
+        FloatingActionButton(
+          onPressed: () => Navigator.pushNamed(context, '/feedback_admin'),
+          child: const Icon(Icons.feedback),
+        ),
+      ],
+    );
   }
 
-  Map<String, dynamic> userData = {};
-  getStuff() {
+  @override
+  void initState() {
     SharedPreferences.getInstance().then((prefs) {
       setState(() {
         userData['username'] = prefs.getString('username') ?? '';
@@ -391,12 +418,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         userData['phone_number'] = prefs.getString('phone_number') ?? '';
       });
     });
-  }
-
-  @override
-  void initState() {
     super.initState();
-    getStuff();
   }
 
   @override

@@ -15,11 +15,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Map<String, dynamic> userData = {};
   final String defaultImg =
       "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
 
-  Map<String, dynamic> userData = {};
-  getStuff() {
+  @override
+  void initState() {
     SharedPreferences.getInstance().then((prefs) {
       setState(() {
         userData['username'] = prefs.getString('username') ?? '';
@@ -28,12 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
         userData['phone_number'] = prefs.getString('phone_number') ?? '';
       });
     });
-  }
-
-  @override
-  void initState() {
     super.initState();
-    getStuff();
   }
 
   @override
