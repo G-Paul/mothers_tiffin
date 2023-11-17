@@ -8,6 +8,9 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
+  final String defaultImg =
+      "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
+
   @override
   Widget build(BuildContext context) {
     final selectedItems =
@@ -42,8 +45,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           fontSize: 20,
                         )),
                     leading: CircleAvatar(
-                      backgroundImage:
-                          NetworkImage(selectedItems[key]!['imageURL']),
+                      backgroundImage: NetworkImage(
+                          selectedItems[key]!['imageUrl'] ?? defaultImg),
                     ),
                   );
                 },
