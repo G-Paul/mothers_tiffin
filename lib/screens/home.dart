@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -96,8 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ListTile(
                   title: Text("Hi! ${_userData["username"]}",
                       style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          Theme.of(context).textTheme.headlineLarge?.copyWith(
                                 color: Theme.of(context).colorScheme.onPrimary,
+                                fontWeight: FontWeight.bold,
                               )),
                   subtitle: Text(
                     greet(),
@@ -105,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Theme.of(context)
                               .colorScheme
                               .onPrimary
-                              .withOpacity(0.7),
+                              .withOpacity(0.8),
                         ),
                   ),
                   contentPadding: const EdgeInsets.only(
@@ -137,11 +138,16 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             color: Theme.of(context).primaryColor,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+                bottom: 90,
+              ),
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius:
-                      const BorderRadius.only(topLeft: Radius.circular(200))),
+                      const BorderRadius.only(topLeft: Radius.circular(150))),
               child: StreamBuilder(
                 stream:
                     FirebaseFirestore.instance.collection('Menu').snapshots(),
@@ -184,7 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ?.copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onBackground,
+                                          .onSurface,
+                                      fontWeight: FontWeight.w600,
+                                      decoration: TextDecoration.underline,
                                     ),
                               ),
                             ),
@@ -225,39 +233,35 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 0,
             )
           : Container(
-              height: 60,
-              width: double.infinity,
+              height: 70,
+              width: MediaQuery.of(context).size.width,
               color: Theme.of(context).colorScheme.primary,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
                       "${_selectedItems.length} items in cart",
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/checkout',
                             arguments: _selectedItems);
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Text(
-                        "Checkout",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary),
-                      ),
+                      child: const Text("Checkout",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          )),
                     ),
                   ),
                 ],

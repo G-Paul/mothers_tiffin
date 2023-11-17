@@ -62,10 +62,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         padding: const EdgeInsets.all(16.0),
         children: [
           SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
               children: apps!.map<Widget>((UpiApp app) {
                 return GestureDetector(
                   onTap: () {
@@ -177,6 +174,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final total = ModalRoute.of(context)!.settings.arguments as num;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: const Text("Choose UPI"),
       ),
@@ -196,7 +194,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       child: Text(
                         _upiErrorHandler(snapshot.error.runtimeType),
                         style: header,
-                      ), // Print's text message on screen
+                      ),
                     );
                   }
 

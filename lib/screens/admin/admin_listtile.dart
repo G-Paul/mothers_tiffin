@@ -48,7 +48,7 @@ class ItemTile extends StatelessWidget {
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
               colors: [
-                Colors.black.withOpacity(0.7),
+                Colors.black.withOpacity(0.8),
                 Colors.black.withOpacity(0.6),
                 Colors.black.withOpacity(0.4),
                 Colors.black.withOpacity(0.2),
@@ -66,7 +66,8 @@ class ItemTile extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
                     ),
               ),
               Row(
@@ -75,16 +76,15 @@ class ItemTile extends StatelessWidget {
                   Text(
                     category,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(0.8),
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                   ),
                   Text(
                     "₹ $price",
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                   ),
                 ],

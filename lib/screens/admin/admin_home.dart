@@ -404,7 +404,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             },
             child: const Icon(Icons.edit),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 16, height: 16),
           FloatingActionButton(
             onPressed: () {
               deleteItem();
@@ -433,7 +433,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: buildFloatingActionButton(),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -452,8 +452,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 ListTile(
                   title: Text("Hi! Admin",
                       style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          Theme.of(context).textTheme.headlineLarge?.copyWith(
                                 color: Theme.of(context).colorScheme.onPrimary,
+                                fontWeight: FontWeight.bold,
                               )),
                   subtitle: Text(
                     greet(),
@@ -461,7 +462,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                           color: Theme.of(context)
                               .colorScheme
                               .onPrimary
-                              .withOpacity(0.7),
+                              .withOpacity(0.8),
                         ),
                   ),
                   contentPadding: const EdgeInsets.only(
@@ -495,9 +496,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius:
-                      const BorderRadius.only(topLeft: Radius.circular(200))),
+                      const BorderRadius.only(topLeft: Radius.circular(150))),
               child: StreamBuilder(
                 stream:
                     FirebaseFirestore.instance.collection("Menu").snapshots(),

@@ -85,6 +85,7 @@ class _MenuDetailsScreenState extends State<MenuDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           title: const Text("Modify Details"),
           foregroundColor: Theme.of(context).textTheme.titleLarge!.color,
