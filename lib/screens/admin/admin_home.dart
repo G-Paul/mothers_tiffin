@@ -22,6 +22,8 @@ class AdminHomeScreen extends StatefulWidget {
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   Map<String, dynamic> _userData = {};
   List<String> selectedItems = [];
+  final String defaultImg =
+      "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
@@ -173,7 +175,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       await FirebaseFirestore.instance.collection("Menu").add({
                         "name": name,
                         "price": price,
-                        "category": category
+                        "category": category,
+                        "image_url": defaultImg,
                       }).then((value) async {
                         await FirebaseStorage.instance
                             .ref('menu_images/${value.id}.jpg')
@@ -229,7 +232,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           _priceController.text = itemdata["price"].toString();
           _categoryController.text = itemdata["category"];
           setState(() {
-            imageURL = itemdata["image_url"];
+            imageURL = itemdata["image_url"] ?? defaultImg;
           });
         } else {
           // Item data is null
@@ -479,9 +482,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             Theme.of(context).colorScheme.onPrimary,
                         radius: 22,
                         child: CircleAvatar(
-                          foregroundImage: NetworkImage(_userData[
-                                  "profile_image"] ??
-                              "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4"),
+                          foregroundImage: NetworkImage(
+                              _userData["profile_image"] ?? defaultImg),
                           radius: 20,
                         ),
                       ),

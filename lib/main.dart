@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mothers_kitchen/screens/admin/admin_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mothers_kitchen/screens/auth/intro.dart';
@@ -11,6 +12,7 @@ import 'package:mothers_kitchen/screens/home.dart';
 import 'package:mothers_kitchen/screens/user_details.dart';
 import 'package:mothers_kitchen/screens/checkout.dart';
 import 'package:mothers_kitchen/screens/payment.dart';
+import 'package:mothers_kitchen/screens/cart_provider.dart';
 import 'firebase_options.dart';
 
 import 'app_themes.dart';
@@ -20,7 +22,6 @@ import 'package:mothers_kitchen/screens/auth/login_email.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //only portrait mode
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp(
@@ -35,31 +36,52 @@ void main() async {
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
   final String userType;
-  const MyApp({required this.isLoggedIn, required this.userType, super.key});
-  // This widget is the root of your application.
+  const MyApp({
+    required this.isLoggedIn,
+    required this.userType,
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mother\'s Tiffin',
-      theme: LightThemes.theme1,
-      darkTheme: DarkThemes.theme1,
-      themeMode: ThemeMode.light,
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/home': (context) => const HomeScreen(),
-        '/admin_home': (context) => const AdminHomeScreen(),
-        '/intro': (context) => const AuthScreen(),
-        '/signin': (context) => const SignInScreen(),
-        '/signup': (context) => const SignUpScreen(),
-        '/pwreset': (context) => const ResetPasswordScreen(),
-        '/details': (context) => const MenuDetailsScreen(),
-        '/checkout': (context) => const CheckoutScreen(),
-        '/payment': (context) => const PaymentScreen(),
-      },
-      home: (FirebaseAuth.instance.currentUser != null)
-          ? getScreen(userType)
-          : const AuthScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<CartProvider>(
+          create: (context) => CartProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Mother\'s Tiffin',
+        theme: LightThemes.theme1,
+        darkTheme: DarkThemes.theme1,
+        themeMode: ThemeMode.light,
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/home': (context) => const HomeScreen(),
+          '/admin_home': (context) => const AdminHomeScreen(),
+          '/intro': (context) => const AuthScreen(),
+          '/signin': (context) => const SignInScreen(),
+          '/signup': (context) => const SignUpScreen(),
+          '/pwreset': (context) => const ResetPasswordScreen(),
+          '/details': (context) => const MenuDetailsScreen(),
+          '/checkout': (context) => const CheckoutScreen(),
+          '/payment': (context) => const PaymentScreen(),
+        },
+        home: MyAppWrapper(userType: userType),
+      ),
     );
+  }
+}
+
+class MyAppWrapper extends StatelessWidget {
+  final String userType;
+  const MyAppWrapper({required this.userType, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return (FirebaseAuth.instance.currentUser != null)
+        ? getScreen(userType)
+        : const AuthScreen();
   }
 }
 
