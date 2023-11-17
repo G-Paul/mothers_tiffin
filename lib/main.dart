@@ -8,17 +8,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mothers_kitchen/screens/auth/intro.dart';
 import 'package:mothers_kitchen/screens/auth/reset_password.dart';
 import 'package:mothers_kitchen/screens/auth/signup.dart';
+import 'package:mothers_kitchen/screens/auth/login_email.dart';
 import 'package:mothers_kitchen/screens/home.dart';
-import 'package:mothers_kitchen/screens/user_details.dart';
+import 'package:mothers_kitchen/screens/shared/user_details.dart';
 import 'package:mothers_kitchen/screens/checkout.dart';
 import 'package:mothers_kitchen/screens/payment.dart';
-import 'package:mothers_kitchen/screens/cart_provider.dart';
+import 'package:mothers_kitchen/screens/feedback.dart';
+import 'package:mothers_kitchen/screens/utils/cart_provider.dart';
+
 import 'firebase_options.dart';
-
 import 'app_themes.dart';
-
-//screens
-import 'package:mothers_kitchen/screens/auth/login_email.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,6 +65,7 @@ class MyApp extends StatelessWidget {
           '/details': (context) => const MenuDetailsScreen(),
           '/checkout': (context) => const CheckoutScreen(),
           '/payment': (context) => const PaymentScreen(),
+          '/feedback': (context) => const FeedBackScreen(),
         },
         home: MyAppWrapper(userType: userType),
       ),
@@ -75,7 +75,10 @@ class MyApp extends StatelessWidget {
 
 class MyAppWrapper extends StatelessWidget {
   final String userType;
-  const MyAppWrapper({required this.userType, Key? key}) : super(key: key);
+  const MyAppWrapper({
+    required this.userType,
+    Key? key
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import 'cart_provider.dart';
+import 'utils/cart_provider.dart';
 
 class ItemTile extends StatelessWidget {
   final String id;

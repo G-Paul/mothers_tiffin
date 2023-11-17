@@ -1,49 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'listtile.dart';
-import 'cart_provider.dart';
+import 'utils/cart_provider.dart';
+import 'utils/topbar.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Map<String, dynamic> _userData = {};
   final String defaultImg =
       "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
 
-  void getStuff() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    if (auth.currentUser == null) {
-      Navigator.pushNamedAndRemoveUntil(context, '/intro', (route) => false);
-    }
-    User user = auth.currentUser!;
-    String uid = user.uid;
-
-    await firestore.collection("Customer").doc(uid).get().then((value) {
+  Map<String, dynamic> userData = {};
+  getStuff() {
+    SharedPreferences.getInstance().then((prefs) {
       setState(() {
-        _userData = value.data()!;
+        userData['username'] = prefs.getString('username') ?? '';
+        userData['email'] = prefs.getString('email') ?? '';
+        userData['profile_image'] = prefs.getString('profile_image') ?? '';
+        userData['phone_number'] = prefs.getString('phone_number') ?? '';
       });
     });
-  }
-
-  String greet() {
-    var hour = DateTime.now().hour;
-    if (hour < 12) {
-      return 'Good Morning';
-    }
-    if (hour < 17) {
-      return 'Good Afternoon';
-    }
-    return 'Good Evening';
   }
 
   @override
@@ -55,65 +39,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of<CartProvider>(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(50),
-              ),
-            ),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                ListTile(
-                  title: Text("Hi! ${_userData["username"]}",
-                      style:
-                          Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontWeight: FontWeight.bold,
-                              )),
-                  subtitle: Text(
-                    greet(),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(0.8),
-                        ),
-                  ),
-                  contentPadding: const EdgeInsets.only(
-                      top: 0, bottom: 0, left: 20, right: 15),
-                  trailing: InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/details');
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      radius: 24,
-                      child: CircleAvatar(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
-                        radius: 22,
-                        child: CircleAvatar(
-                          foregroundImage: NetworkImage(_userData[
-                                  "profile_image"] ??
-                              "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4"),
-                          radius: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          TopBar(userData: userData),
           Container(
             color: Theme.of(context).primaryColor,
             child: Container(
@@ -208,6 +140,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/feedback', arguments: userData);
+        },
+        child: const Icon(Icons.feedback),
       ),
       bottomSheet: (cartProvider.selectedItems.isEmpty)
           ? const SizedBox(

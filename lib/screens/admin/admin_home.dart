@@ -1,27 +1,26 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'admin_listtile.dart';
+import '../utils/topbar.dart';
 
 class AdminHomeScreen extends StatefulWidget {
-  const AdminHomeScreen({super.key});
+  const AdminHomeScreen({key}) : super(key: key);
 
   @override
   State<AdminHomeScreen> createState() => _AdminHomeScreenState();
 }
 
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
-  Map<String, dynamic> _userData = {};
-  List<String> selectedItems = [];
+  Map<String, dynamic> selectedItems = {};
   final String defaultImg =
       "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
 
@@ -30,23 +29,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _imageController = TextEditingController();
   File? _itemImage;
-
-  void getStuff() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    if (auth.currentUser == null) {
-      Navigator.pushNamedAndRemoveUntil(context, '/intro', (route) => false);
-    }
-    User user = auth.currentUser!;
-    String uid = user.uid;
-
-    await firestore.collection("Customer").doc(uid).get().then((value) {
-      setState(() {
-        _userData = value.data()!;
-      });
-    });
-  }
 
   void _pickImage({required ImageSource source}) async {
     await ImagePicker()
@@ -62,17 +44,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         });
       }
     });
-  }
-
-  String greet() {
-    var hour = DateTime.now().hour;
-    if (hour < 12) {
-      return 'Good Morning';
-    }
-    if (hour < 17) {
-      return 'Good Afternoon';
-    }
-    return 'Good Evening';
   }
 
   void cleanup({bool isEdit = false}) {
@@ -206,7 +177,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   }
 
   void deleteItem() {
-    for (String id in selectedItems) {
+    for (String id in selectedItems.keys) {
       FirebaseFirestore.instance.collection("Menu").doc(id).delete();
     }
     setState(() {
@@ -220,28 +191,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     bool isNameChanged = false;
     bool isPriceChanged = false;
     bool isCategoryChanged = false;
-    await FirebaseFirestore.instance
-        .collection("Menu")
-        .doc(id)
-        .get()
-        .then((DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
-      if (documentSnapshot.exists) {
-        Map<String, dynamic>? itemdata = documentSnapshot.data();
-        if (itemdata != null) {
-          _nameController.text = itemdata["name"];
-          _priceController.text = itemdata["price"].toString();
-          _categoryController.text = itemdata["category"];
-          setState(() {
-            imageURL = itemdata["image_url"] ?? defaultImg;
-          });
-        } else {
-          // Item data is null
-        }
-      } else {
-        // Document does not exist
-      }
-    }).catchError((error) {
-      // Error fetching data
+
+    _nameController.text = selectedItems[id]["title"];
+    _priceController.text = selectedItems[id]["price"].toString();
+    _categoryController.text = selectedItems[id]["category"];
+    setState(() {
+      imageURL = selectedItems[id]["image_url"] ?? defaultImg;
     });
 
     showModalBottomSheet(
@@ -370,12 +325,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     );
   }
 
-  void selectItem(String id) {
+  void selectItem(String id, dynamic data) {
     setState(() {
-      if (selectedItems.contains(id)) {
+      if (selectedItems.containsKey(id)) {
         selectedItems.remove(id);
       } else {
-        selectedItems.add(id);
+        selectedItems[id] = data;
       }
     });
   }
@@ -403,7 +358,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         children: [
           FloatingActionButton(
             onPressed: () {
-              modifyItem(selectedItems[0]);
+              modifyItem(selectedItems.keys.first);
             },
             child: const Icon(Icons.edit),
           ),
@@ -426,6 +381,18 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     }
   }
 
+  Map<String, dynamic> userData = {};
+  getStuff() {
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        userData['username'] = prefs.getString('username') ?? '';
+        userData['email'] = prefs.getString('email') ?? '';
+        userData['profile_image'] = prefs.getString('profile_image') ?? '';
+        userData['phone_number'] = prefs.getString('phone_number') ?? '';
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -440,59 +407,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(50),
-              ),
-            ),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                ListTile(
-                  title: Text("Hi! Admin",
-                      style:
-                          Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontWeight: FontWeight.bold,
-                              )),
-                  subtitle: Text(
-                    greet(),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(0.8),
-                        ),
-                  ),
-                  contentPadding: const EdgeInsets.only(
-                      top: 0, bottom: 0, left: 20, right: 15),
-                  trailing: InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/details');
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      radius: 24,
-                      child: CircleAvatar(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
-                        radius: 22,
-                        child: CircleAvatar(
-                          foregroundImage: NetworkImage(
-                              _userData["profile_image"] ?? defaultImg),
-                          radius: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          TopBar(userData: userData),
           Container(
             color: Theme.of(context).primaryColor,
             child: Container(
@@ -535,7 +450,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         imageUrl: data['image_url'] ??
                             "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4",
                         selectItem: selectItem,
-                        isSelected: selectedItems.contains(document.id),
+                        isSelected: selectedItems.containsKey(document.id),
                       );
                     }).toList(),
                   );

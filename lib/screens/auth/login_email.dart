@@ -6,8 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final _firebaseAuth = FirebaseAuth.instance;
-
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
@@ -19,6 +17,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _pwController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
   bool _firstTime = true;
   String _email = '';
   String _password = '';
@@ -32,8 +31,9 @@ class _SignInScreenState extends State<SignInScreen> {
     setState(() {
       _signUpState = 'Signing In...';
     });
+
     try {
-      await _firebaseAuth
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password)
           .then((value) async {
         List<dynamic> adminIds = await FirebaseFirestore.instance
@@ -41,6 +41,13 @@ class _SignInScreenState extends State<SignInScreen> {
             .doc('admin')
             .get()
             .then((value) => value.data()!['users']);
+
+        Map<String, dynamic> userData = await FirebaseFirestore.instance
+            .collection("Customer")
+            .doc(value.user!.uid)
+            .get()
+            .then((value) => value.data()!);
+        
         await SharedPreferences.getInstance().then((prefs) {
           prefs.setBool('isLoggedIn', true);
           if (adminIds.contains(value.user!.uid)) {
@@ -51,7 +58,12 @@ class _SignInScreenState extends State<SignInScreen> {
           } else {
             prefs.setString('userType', 'user');
           }
+          prefs.setString('username', userData['username']);
+          prefs.setString('email', userData['email']);
+          prefs.setString('phone_number', userData['phone_number']);
+          prefs.setString('profile_image', userData['profile_image']);
         });
+
         if (userType == 'admin') {
           Navigator.pushNamedAndRemoveUntil(
               context, '/admin_home', (route) => false);
@@ -83,11 +95,6 @@ class _SignInScreenState extends State<SignInScreen> {
         );
       }
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
