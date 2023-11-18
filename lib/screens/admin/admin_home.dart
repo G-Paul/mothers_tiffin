@@ -379,11 +379,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       children: [
         if (selectedItems.isEmpty)
           FloatingActionButton(
+            heroTag: 'add',
             onPressed: () => addItem(),
             child: const Icon(Icons.add),
           ),
         if (selectedItems.length == 1) ...[
           FloatingActionButton(
+            heroTag: 'edit',
             onPressed: () => modifyItem(selectedItems.keys.first),
             child: const Icon(Icons.edit),
           ),
@@ -391,16 +393,19 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         ],
         if (selectedItems.isNotEmpty)
           FloatingActionButton(
+            heroTag: 'delete',
             onPressed: () => confirmDelete(),
             child: const Icon(Icons.delete),
           ),
         const SizedBox(width: 16, height: 16),
         FloatingActionButton(
+          heroTag: 'history',
           onPressed: () => Navigator.pushNamed(context, '/order_history'),
           child: const Icon(Icons.history),
         ),
         const SizedBox(width: 16, height: 16),
         FloatingActionButton(
+          heroTag: 'feedback',
           onPressed: () => Navigator.pushNamed(context, '/feedback_admin'),
           child: const Icon(Icons.feedback),
         ),

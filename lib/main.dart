@@ -3,20 +3,21 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mothers_kitchen/screens/admin/admin_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mothers_kitchen/screens/auth/intro.dart';
-import 'package:mothers_kitchen/screens/auth/reset_password.dart';
-import 'package:mothers_kitchen/screens/auth/signup.dart';
-import 'package:mothers_kitchen/screens/auth/login_email.dart';
-import 'package:mothers_kitchen/screens/home.dart';
-import 'package:mothers_kitchen/screens/shared/user_details.dart';
-import 'package:mothers_kitchen/screens/checkout.dart';
-import 'package:mothers_kitchen/screens/payment.dart';
-import 'package:mothers_kitchen/screens/feedback.dart';
-import 'package:mothers_kitchen/screens/admin/get_feedback.dart';
-import 'package:mothers_kitchen/screens/admin/order_history.dart';
-import 'package:mothers_kitchen/screens/utils/cart_provider.dart';
+
+import 'screens/admin/admin_home.dart';
+import 'screens/auth/intro.dart';
+import 'screens/auth/reset_password.dart';
+import 'screens/auth/signup.dart';
+import 'screens/auth/login_email.dart';
+import 'screens/home.dart';
+import 'screens/shared/user_details.dart';
+import 'screens/checkout.dart';
+import 'screens/payment.dart';
+import 'screens/feedback.dart';
+import 'screens/admin/get_feedback.dart';
+import 'screens/admin/order_history.dart';
+import 'screens/utils/cart_provider.dart';
 
 import 'firebase_options.dart';
 import 'app_themes.dart';
@@ -28,6 +29,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   final userType = prefs.getString('userType') ?? '';
