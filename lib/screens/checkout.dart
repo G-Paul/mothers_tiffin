@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -10,6 +12,37 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final String defaultImg =
       "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
+
+  void checkout(Map<String, dynamic> selectedItems) {
+    try {
+      FirebaseFirestore.instance.collection('Order').add({
+        'user': FirebaseAuth.instance.currentUser!.uid,
+        'items': selectedItems.values.toList(),
+        'total': selectedItems.values
+            .map((e) => e['price'] * e['quantity'])
+            .reduce((value, element) => value + element),
+        'time': DateTime.now(),
+        'paid': false,
+      }).then((value) {
+        // selectedItems.clear();
+        final order_id = value.id;
+        Navigator.of(context).pushNamed('/payment', arguments: {
+          'orderId': order_id,
+          'total': selectedItems.values
+              .map((e) => e['price'] * e['quantity'])
+              .reduce((value, element) => value + element)
+              .toStringAsFixed(2)
+        });
+      });
+    } catch (e) {
+      //show the error in a snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,10 +147,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/payment',
-                          arguments: selectedItems);
-                    },
+                    onPressed: () => checkout(selectedItems),
                     style: ButtonStyle(
                       foregroundColor: MaterialStatePropertyAll(
                           Theme.of(context).colorScheme.secondary),

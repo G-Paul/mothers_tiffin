@@ -13,7 +13,7 @@ import 'screens/auth/login_email.dart';
 import 'screens/home.dart';
 import 'screens/shared/user_details.dart';
 import 'screens/checkout.dart';
-import 'screens/payment.dart';
+import 'screens/payment_new.dart';
 import 'screens/feedback.dart';
 import 'screens/admin/get_feedback.dart';
 import 'screens/admin/order_history.dart';
@@ -81,10 +81,7 @@ class MyApp extends StatelessWidget {
 
 class MyAppWrapper extends StatelessWidget {
   final String userType;
-  const MyAppWrapper({
-    required this.userType,
-    Key? key
-  }) : super(key: key);
+  const MyAppWrapper({required this.userType, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

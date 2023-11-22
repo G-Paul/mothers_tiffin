@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+
+class PaymentScreen extends StatefulWidget {
+  const PaymentScreen({super.key});
+
+  @override
+  State<PaymentScreen> createState() => _PaymentScreenState();
+}
+
+class _PaymentScreenState extends State<PaymentScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    return Scaffold(
+      body: Center(
+        child: Text("$args"),
+      ),
+    );
+  }
+}
