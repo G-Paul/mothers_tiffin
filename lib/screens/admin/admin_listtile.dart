@@ -24,7 +24,12 @@ class ItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        selectItem(id);
+        selectItem(id, {
+          "title": title,
+          "imageUrl": imageUrl,
+          "price": price,
+          "category": category,
+        });
       },
       child: Stack(alignment: Alignment.bottomLeft, children: [
         Container(

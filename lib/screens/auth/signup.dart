@@ -149,11 +149,6 @@ class _SignInScreenState extends State<SignUpScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _emailController.dispose();
     _usernameController.dispose();

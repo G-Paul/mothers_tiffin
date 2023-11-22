@@ -1,140 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'listtile.dart';
+import 'utils/cart_provider.dart';
+import 'utils/topbar.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isCartEmpty = true;
-  Map<String, dynamic> _userData = {};
-  final Map<String, dynamic> _selectedItems = {};
-
-  void getStuff() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    if (auth.currentUser == null) {
-      Navigator.pushNamedAndRemoveUntil(context, '/intro', (route) => false);
-    }
-    User user = auth.currentUser!;
-    String uid = user.uid;
-
-    await firestore.collection("Customer").doc(uid).get().then((value) {
-      setState(() {
-        _userData = value.data()!;
-      });
-    });
-  }
-
-  String greet() {
-    var hour = DateTime.now().hour;
-    if (hour < 12) {
-      return 'Good Morning';
-    }
-    if (hour < 17) {
-      return 'Good Afternoon';
-    }
-    return 'Good Evening';
-  }
-
-  void changeCart(
-      {required String id,
-      required String title,
-      required String imageUrl,
-      required num price,
-      int inc = 0}) {
-    setState(() {
-      if (_selectedItems.containsKey(id)) {
-        _selectedItems[id]!['quantity'] += inc;
-      } else {
-        _selectedItems[id] = {
-          'quantity': 1,
-          'price': price,
-          'title': title,
-          'imageURL': imageUrl
-        };
-      }
-      if (_selectedItems[id]!['quantity'] == 0) {
-        _selectedItems.remove(id);
-      }
-      _isCartEmpty = _selectedItems.isEmpty;
-    });
-  }
+  Map<String, dynamic> userData = {};
+  final String defaultImg =
+      "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
 
   @override
   void initState() {
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        userData['username'] = prefs.getString('username') ?? '';
+        userData['email'] = prefs.getString('email') ?? '';
+        userData['profile_image'] = prefs.getString('profile_image') ?? '';
+        userData['phone_number'] = prefs.getString('phone_number') ?? '';
+      });
+    });
     super.initState();
-    getStuff();
   }
 
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(50),
-              ),
-            ),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                ListTile(
-                  title: Text("Hi! ${_userData["username"]}",
-                      style:
-                          Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontWeight: FontWeight.bold,
-                              )),
-                  subtitle: Text(
-                    greet(),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withOpacity(0.8),
-                        ),
-                  ),
-                  contentPadding: const EdgeInsets.only(
-                      top: 0, bottom: 0, left: 20, right: 15),
-                  trailing: InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/details');
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      radius: 24,
-                      child: CircleAvatar(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
-                        radius: 22,
-                        child: CircleAvatar(
-                          foregroundImage: NetworkImage(_userData[
-                                  "profile_image"] ??
-                              "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4"),
-                          radius: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          TopBar(userData: userData),
           Container(
             color: Theme.of(context).primaryColor,
             child: Container(
@@ -196,26 +103,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                               ),
                             ),
-                            GridView.count(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 0.75,
-                              scrollDirection: Axis.vertical,
-                              children: categories[category]
-                                  .map<Widget>((item) => ItemTile(
+                            Consumer<CartProvider>(
+                              builder: (context, cartProvider, child) {
+                                return GridView.count(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  childAspectRatio: 0.75,
+                                  scrollDirection: Axis.vertical,
+                                  children: [
+                                    for (var item in categories[category])
+                                      ItemTile(
                                         id: item['id'],
                                         title: item['name'],
                                         price: item['price'].toDouble(),
-                                        imageUrl: item['image_url'],
-                                        changeCart: changeCart,
-                                        quantity: _selectedItems[item['id']]
-                                                ?['quantity'] ??
-                                            0,
-                                      ))
-                                  .toList(),
+                                        imageUrl:
+                                            item['image_url'] ?? defaultImg,
+                                        cartProvider: cartProvider,
+                                      )
+                                  ],
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -227,7 +137,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      bottomSheet: (_isCartEmpty)
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/feedback', arguments: userData);
+        },
+        child: const Icon(Icons.feedback),
+      ),
+      bottomSheet: (cartProvider.selectedItems.isEmpty)
           ? const SizedBox(
               height: 0,
               width: 0,
@@ -242,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      "${_selectedItems.length} items in cart",
+                      "${cartProvider.selectedItems.length} items in cart",
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -255,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/checkout',
-                            arguments: _selectedItems);
+                            arguments: cartProvider.selectedItems);
                       },
                       child: const Text("Checkout",
                           style: TextStyle(

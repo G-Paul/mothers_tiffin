@@ -1,21 +1,22 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
+import 'utils/cart_provider.dart';
 
 class ItemTile extends StatelessWidget {
   final String id;
   final String title;
   final String imageUrl;
   final double price;
-  final Function changeCart;
-  final num quantity;
+  final CartProvider cartProvider;
   const ItemTile({
     super.key,
     required this.id,
     required this.title,
     required this.imageUrl,
     required this.price,
-    required this.changeCart,
-    required this.quantity,
+    required this.cartProvider,
   });
 
   @override
@@ -79,15 +80,16 @@ class ItemTile extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                   ),
-                  quantity == 0
+                  (cartProvider.selectedItems[id] == null)
                       ? InkWell(
                           onTap: () {
-                            changeCart(
-                                id: id,
-                                price: price,
-                                title: title,
-                                imageUrl: imageUrl,
-                                inc: 0);
+                            cartProvider.changeCart(
+                              id: id,
+                              price: price,
+                              title: title,
+                              imageUrl: imageUrl,
+                              inc: 1,
+                            );
                           },
                           child: Container(
                             height: 30,
@@ -106,18 +108,20 @@ class ItemTile extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: () {
-                                changeCart(
-                                    id: id,
-                                    price: price,
-                                    title: title,
-                                    imageUrl: imageUrl,
-                                    inc: -1);
+                                cartProvider.changeCart(
+                                  id: id,
+                                  price: price,
+                                  title: title,
+                                  imageUrl: imageUrl,
+                                  inc: -1,
+                                );
                               },
                               child: Container(
                                 height: 30,
                                 width: 25,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(5),
                                     bottomLeft: Radius.circular(5),
@@ -139,7 +143,7 @@ class ItemTile extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Text(
-                                  "$quantity",
+                                  "${cartProvider.selectedItems[id]!['quantity']}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -154,18 +158,20 @@ class ItemTile extends StatelessWidget {
                             )),
                             InkWell(
                               onTap: () {
-                                changeCart(
-                                    id: id,
-                                    price: price,
-                                    title: title,
-                                    imageUrl: imageUrl,
-                                    inc: 1);
+                                cartProvider.changeCart(
+                                  id: id,
+                                  price: price,
+                                  title: title,
+                                  imageUrl: imageUrl,
+                                  inc: 1,
+                                );
                               },
                               child: Container(
                                 height: 30,
                                 width: 25,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5),

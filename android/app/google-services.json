@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:849556006712:android:f67e6311c7a22b77aa43cd",
+        "android_client_info": {
+          "package_name": "com.artemis.mothers_kitchen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV7YG_8zLidSki_UufmlwPsyFSvNWkc60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:849556006712:android:1ed01af85f4ea36aaa43cd",
         "android_client_info": {
           "package_name": "com.mkitchen.com.mothers_kitchen"
@@ -47,7 +66,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:849556006712:android:b5e3b1c6e6630bffaa43cd",
         "android_client_info": {
-          "package_name": "com.motherstiffin.com.mothers_kitchen"
+          "package_name": "com.motherstiffin.com.mothers_tiffin"
         }
       },
       "oauth_client": [],

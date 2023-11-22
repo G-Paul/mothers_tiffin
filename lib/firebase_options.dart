@@ -18,7 +18,7 @@ class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
+        'DefaultFirebaseOptions are not supported for web - '
         'you can reconfigure this by running the FlutterFire CLI again.',
       );
     }
@@ -29,17 +29,17 @@ class DefaultFirebaseOptions {
         return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
+          'DefaultFirebaseOptions are not supported for macOS - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
         throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
+          'DefaultFirebaseOptions are not supported for windows - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.linux:
         throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
+          'DefaultFirebaseOptions are not supported for linux - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAV7YG_8zLidSki_UufmlwPsyFSvNWkc60',
-    appId: '1:849556006712:android:b5e3b1c6e6630bffaa43cd',
+    appId: '1:849556006712:android:f67e6311c7a22b77aa43cd',
     messagingSenderId: '849556006712',
     projectId: 'kitchen-mamas',
     storageBucket: 'kitchen-mamas.appspot.com',
@@ -59,10 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAM4gvr6i8sR2PC_hPk1I9kNIXDeQo8H6s',
-    appId: '1:849556006712:ios:4cf35200541dcf88aa43cd',
+    appId: '1:849556006712:ios:cf6fdc47b43e99acaa43cd',
     messagingSenderId: '849556006712',
     projectId: 'kitchen-mamas',
     storageBucket: 'kitchen-mamas.appspot.com',
-    iosBundleId: 'com.motherstiffin.com.mothersTiffin',
+    iosBundleId: 'com.artemis.mothersKitchen',
   );
 }
