@@ -290,7 +290,7 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
               child: Center(
                 child: FaIcon(
                   widget.leadingIcon,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   size: 20,
                 ),
               ),
@@ -340,7 +340,7 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                             MediaQuery.of(context).viewInsets.bottom +
                             10,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background,
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                         child: SingleChildScrollView(
                           child: Column(
@@ -353,10 +353,8 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                     .bodyMedium!
                                     .copyWith(
                                         color: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .color!
-                                            .withOpacity(0.7),
+                                            .colorScheme
+                                            .onSurface,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15),
                               ),
@@ -383,10 +381,17 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                           ?.copyWith(
                                             fontWeight: FontWeight.w600,
                                           ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
+                                      ),
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color:
-                                                Theme.of(context).primaryColor),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
                                       )),
                                 ),
                               ),
@@ -400,7 +405,9 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                     style: ButtonStyle(
                                       foregroundColor:
                                           MaterialStateProperty.all(
-                                              Theme.of(context).primaryColor),
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary),
                                       padding: MaterialStateProperty.all(
                                           const EdgeInsets.symmetric(
                                               horizontal: 20)),
@@ -410,22 +417,30 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                             .bodyMedium!
                                             .copyWith(
                                                 fontSize: 18,
-                                                fontFamily: "Roboto",
+                                                // fontFamily: "Roboto",
                                                 fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     child: const Text("Cancel"),
                                   ),
-                                  TextButton(
+                                  ElevatedButton(
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
                                         widget.onEdited(_controller.value.text);
                                       }
                                     },
                                     style: ButtonStyle(
+                                      elevation: MaterialStateProperty.all(0),
                                       foregroundColor:
                                           MaterialStateProperty.all(
-                                              Theme.of(context).primaryColor),
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondary),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary),
                                       padding: MaterialStateProperty.all(
                                           const EdgeInsets.symmetric(
                                               horizontal: 20)),
@@ -435,7 +450,7 @@ class _CustomDetailTileState extends State<CustomDetailTile> {
                                             .bodyMedium!
                                             .copyWith(
                                                 fontSize: 18,
-                                                fontFamily: "Roboto",
+                                                // fontFamily: "Roboto",
                                                 fontWeight: FontWeight.bold),
                                       ),
                                     ),

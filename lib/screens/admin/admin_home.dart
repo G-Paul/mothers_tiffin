@@ -126,7 +126,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                           color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
-                              color: Theme.of(context).colorScheme.background,
+                              color: Theme.of(context).colorScheme.surface,
                               width: 3,
                               strokeAlign: BorderSide.strokeAlignOutside),
                         ),
@@ -163,6 +163,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).colorScheme.onPrimary),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).colorScheme.primary),
+                  ),
                   onPressed: () async {
                     String name = _nameController.text;
                     double price =

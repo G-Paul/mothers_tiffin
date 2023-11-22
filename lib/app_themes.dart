@@ -5,8 +5,8 @@ class LightThemes {
   static final theme1 = ThemeData(
     colorScheme: const ColorScheme(
       brightness: Brightness.light,
-      primary: Color.fromARGB(255, 255, 111, 28),
-      secondary: Color.fromARGB(255, 255, 179, 0),
+      primary: Color.fromARGB(255, 255, 248, 120),
+      secondary: Color.fromARGB(255, 255, 157, 0),
       background: Color(0xFFf7f7f7),
       onPrimary: Color.fromARGB(195, 0, 0, 0),
       onSecondary: Color.fromARGB(165, 0, 0, 0),
@@ -14,7 +14,8 @@ class LightThemes {
       onError: Colors.black,
       error: Colors.red,
       // primaryVariant: Color(0xFFffea00),
-      surface: Color.fromARGB(255, 255, 251, 205),
+      surface: Color.fromARGB(255, 252, 250, 236),
+      // surface: Colors.white,
       onSurface: Colors.black,
     ),
     fontFamily: GoogleFonts.josefinSlab().fontFamily,
