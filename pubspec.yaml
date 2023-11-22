@@ -27,6 +27,8 @@ dependencies:
   cached_network_image: ^3.3.0
   upi_india: ^3.0.1
   provider: ^6.1.1
+  flutter_floating_bottom_bar: ^1.2.0
+  floating_navbar: ^2.0.2
 
 dev_dependencies:
   flutter_test:

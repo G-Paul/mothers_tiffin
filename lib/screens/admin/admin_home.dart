@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mothers_kitchen/screens/feedback.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'admin_listtile.dart';
 import '../utils/topbar.dart';
+import 'order_history.dart';
+import 'get_feedback.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({key}) : super(key: key);
@@ -30,6 +34,22 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _imageController = TextEditingController();
   File? _itemImage;
+  var currentIndex = 0;
+  List<String> listOfStrings = [
+    '  Home',
+    '  Orders',
+    'Feedback',
+  ];
+  List<IconData> listOfIcons = [
+    Icons.home_rounded,
+    Icons.list_rounded,
+    Icons.rate_review_outlined,
+  ];
+  List<String> listOfRoutes = [
+    '/',
+    '/order_history',
+    '/feedback_admin',
+  ];
 
   void _pickImage({required ImageSource source}) async {
     await ImagePicker()
@@ -379,44 +399,45 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     );
   }
 
-  Widget buildFloatingActionButton() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        if (selectedItems.isEmpty)
-          FloatingActionButton(
-            heroTag: 'add',
-            onPressed: () => addItem(),
-            child: const Icon(Icons.add),
-          ),
-        if (selectedItems.length == 1) ...[
-          FloatingActionButton(
-            heroTag: 'edit',
-            onPressed: () => modifyItem(selectedItems.keys.first),
-            child: const Icon(Icons.edit),
-          ),
-          const SizedBox(width: 16, height: 16),
+  Widget? buildFloatingActionButton() {
+    if (currentIndex == 0)
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if (selectedItems.isEmpty)
+            FloatingActionButton(
+              heroTag: 'add',
+              onPressed: () => addItem(),
+              child: const Icon(Icons.add),
+            ),
+          if (selectedItems.length == 1) ...[
+            FloatingActionButton(
+              heroTag: 'edit',
+              onPressed: () => modifyItem(selectedItems.keys.first),
+              child: const Icon(Icons.edit),
+            ),
+            const SizedBox(width: 16, height: 16),
+          ],
+          if (selectedItems.isNotEmpty)
+            FloatingActionButton(
+              heroTag: 'delete',
+              onPressed: () => confirmDelete(),
+              child: const Icon(Icons.delete),
+            ),
+          // const SizedBox(width: 16, height: 16),
+          // FloatingActionButton(
+          //   heroTag: 'history',
+          //   onPressed: () => Navigator.pushNamed(context, '/order_history'),
+          //   child: const Icon(Icons.history),
+          // ),
+          // const SizedBox(width: 16, height: 16),
+          // FloatingActionButton(
+          //   heroTag: 'feedback',
+          //   onPressed: () => Navigator.pushNamed(context, '/feedback_admin'),
+          //   child: const Icon(Icons.feedback),
+          // ),
         ],
-        if (selectedItems.isNotEmpty)
-          FloatingActionButton(
-            heroTag: 'delete',
-            onPressed: () => confirmDelete(),
-            child: const Icon(Icons.delete),
-          ),
-        const SizedBox(width: 16, height: 16),
-        FloatingActionButton(
-          heroTag: 'history',
-          onPressed: () => Navigator.pushNamed(context, '/order_history'),
-          child: const Icon(Icons.history),
-        ),
-        const SizedBox(width: 16, height: 16),
-        FloatingActionButton(
-          heroTag: 'feedback',
-          onPressed: () => Navigator.pushNamed(context, '/feedback_admin'),
-          child: const Icon(Icons.feedback),
-        ),
-      ],
-    );
+      );
   }
 
   @override
@@ -434,65 +455,186 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final displayWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       floatingActionButton: buildFloatingActionButton(),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          TopBar(userData: userData),
-          Container(
-            color: Theme.of(context).primaryColor,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius:
-                      const BorderRadius.only(topLeft: Radius.circular(150))),
-              child: StreamBuilder(
-                stream:
-                    FirebaseFirestore.instance.collection("Menu").snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('Something went wrong');
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 40,
-                    mainAxisSpacing: 30,
-                    childAspectRatio: 0.75,
-                    scrollDirection: Axis.vertical,
-                    children:
-                        snapshot.data!.docs.map((DocumentSnapshot document) {
-                      Map<String, dynamic> data =
-                          document.data()! as Map<String, dynamic>;
-
-                      return ItemTile(
-                        id: document.id.toString(),
-                        title: data['name'],
-                        price: data['price'].toDouble(),
-                        category: data['category'],
-                        imageUrl: data['image_url'] ??
-                            "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4",
-                        selectItem: selectItem,
-                        isSelected: selectedItems.containsKey(document.id),
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.all(displayWidth * .05),
+        height: displayWidth * .155,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(.1),
+              blurRadius: 30,
+              offset: Offset(0, 10),
+            ),
+          ],
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: ListView.builder(
+          itemCount: 3,
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: displayWidth * .02),
+          itemBuilder: (context, index) => InkWell(
+            onTap: () {
+              setState(() {
+                currentIndex = index;
+              });
+              // Navigator.pushNamed(context, '${listOfRoutes[currentIndex]}');
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: Stack(
+              children: [
+                AnimatedContainer(
+                  duration: Duration(seconds: 1),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  width: index == currentIndex
+                      ? displayWidth * .36
+                      : displayWidth * .25,
+                  alignment: Alignment.center,
+                  child: AnimatedContainer(
+                    duration: Duration(seconds: 1),
+                    curve: Curves.fastLinearToSlowEaseIn,
+                    height: index == currentIndex ? displayWidth * .12 : 0,
+                    width: index == currentIndex ? displayWidth * .39 : 0,
+                    decoration: BoxDecoration(
+                      color: index == currentIndex
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.7)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
+                ),
+                AnimatedContainer(
+                  duration: Duration(seconds: 1),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  width: index == currentIndex
+                      ? displayWidth * .31
+                      : displayWidth * .18,
+                  alignment: Alignment.center,
+                  child: Stack(
+                    children: [
+                      Row(
+                        children: [
+                          AnimatedContainer(
+                            duration: Duration(seconds: 1),
+                            curve: Curves.fastLinearToSlowEaseIn,
+                            width:
+                                index == currentIndex ? displayWidth * .12 : 0,
+                          ),
+                          AnimatedOpacity(
+                            opacity: index == currentIndex ? 1 : 0,
+                            duration: Duration(seconds: 1),
+                            curve: Curves.fastLinearToSlowEaseIn,
+                            child: Text(
+                              index == currentIndex
+                                  ? '${listOfStrings[index]}'
+                                  : '',
+                              style: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          AnimatedContainer(
+                            duration: Duration(seconds: 1),
+                            curve: Curves.fastLinearToSlowEaseIn,
+                            width:
+                                index == currentIndex ? displayWidth * .03 : 20,
+                          ),
+                          Icon(
+                            listOfIcons[index],
+                            size: displayWidth * .076,
+                            color: index == currentIndex
+                                ? Theme.of(context).colorScheme.secondary
+                                : Colors.black26,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
+      body: currentIndex == 1
+          ? OrderHistoryScreen()
+          : currentIndex == 2
+              ? AdminFeedbackScreen()
+              : ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    TopBar(userData: userData),
+                    Container(
+                      color: Theme.of(context).primaryColor,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(150))),
+                        child: StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection("Menu")
+                              .snapshots(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text('Something went wrong');
+                            }
+
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return GridView.count(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 40,
+                              mainAxisSpacing: 30,
+                              childAspectRatio: 0.75,
+                              scrollDirection: Axis.vertical,
+                              children: snapshot.data!.docs
+                                  .map((DocumentSnapshot document) {
+                                Map<String, dynamic> data =
+                                    document.data()! as Map<String, dynamic>;
+
+                                return ItemTile(
+                                  id: document.id.toString(),
+                                  title: data['name'],
+                                  price: data['price'].toDouble(),
+                                  category: data['category'],
+                                  imageUrl: data['image_url'] ??
+                                      "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4",
+                                  selectItem: selectItem,
+                                  isSelected:
+                                      selectedItems.containsKey(document.id),
+                                );
+                              }).toList(),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
     );
   }
 }

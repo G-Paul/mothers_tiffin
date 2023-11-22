@@ -18,9 +18,42 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        title: const Text('Checkout'),
-      ),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(120),
+          child: Container(
+              height: 120,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: 60,
+                  left: 10,
+                ),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: Icon(Icons.arrow_back),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text("Checkout",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge
+                            ?.copyWith(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.bold,
+                            )),
+                  ],
+                ),
+              ))),
       body: Column(
         children: [
           Expanded(
@@ -56,20 +89,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           Container(
             height: 70,
             width: MediaQuery.of(context).size.width,
-            color: Theme.of(context).colorScheme.primary,
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
+                Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    'Total: ₹${selectedItems.values.map((e) => e['price'] * e['quantity']).reduce((value, element) => value + element).toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
+                  child: Text(
+                      'Total: ₹${selectedItems.values.map((e) => e['price'] * e['quantity']).reduce((value, element) => value + element).toStringAsFixed(2)}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall!
+                          .copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -78,6 +118,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       Navigator.pushNamed(context, '/payment',
                           arguments: selectedItems);
                     },
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStatePropertyAll(
+                          Theme.of(context).colorScheme.secondary),
+                    ),
                     child: const Text("Checkout",
                         style: TextStyle(
                           fontSize: 20,

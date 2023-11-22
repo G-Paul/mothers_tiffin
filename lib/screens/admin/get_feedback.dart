@@ -13,9 +13,28 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        title: const Text('Feedbacks'),
-      ),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(120),
+          child: Container(
+              height: 120,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: 60,
+                  left: 30,
+                ),
+                child: Text("Feedbacks",
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontWeight: FontWeight.bold,
+                        )),
+              ))),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('Feedback').snapshots(),
         builder: (context, snapshot) {
