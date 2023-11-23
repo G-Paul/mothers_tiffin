@@ -42,6 +42,10 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).colorScheme.secondary),
+              ),
               child: const Text("Cancel"),
             ),
             TextButton(
@@ -49,6 +53,10 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
                 deleteItem();
                 Navigator.of(context).pop();
               },
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).colorScheme.secondary),
+              ),
               child: const Text("Delete"),
             ),
           ],

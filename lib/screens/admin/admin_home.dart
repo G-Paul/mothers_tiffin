@@ -383,6 +383,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).colorScheme.secondary),
+              ),
               child: const Text("Cancel"),
             ),
             TextButton(
@@ -390,6 +394,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 deleteItem();
                 Navigator.of(context).pop();
               },
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).colorScheme.secondary),
+              ),
               child: const Text("Delete"),
             ),
           ],
@@ -522,9 +530,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             duration: const Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
                             child: Text(
-                              index == currentIndex
-                                  ? listOfStrings[index]
-                                  : '',
+                              index == currentIndex ? listOfStrings[index] : '',
                               style: TextStyle(
                                 color:
                                     Theme.of(context).colorScheme.onSecondary,
