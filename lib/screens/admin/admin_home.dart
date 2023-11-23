@@ -5,16 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mothers_kitchen/screens/feedback.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'admin_listtile.dart';
 import '../utils/topbar.dart';
 import 'order_history.dart';
-import 'get_feedback.dart';
+import 'admin_feedback.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({key}) : super(key: key);
@@ -400,7 +398,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   }
 
   Widget? buildFloatingActionButton() {
-    if (currentIndex == 0)
+    if (currentIndex == 0) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -424,20 +422,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               onPressed: () => confirmDelete(),
               child: const Icon(Icons.delete),
             ),
-          // const SizedBox(width: 16, height: 16),
-          // FloatingActionButton(
-          //   heroTag: 'history',
-          //   onPressed: () => Navigator.pushNamed(context, '/order_history'),
-          //   child: const Icon(Icons.history),
-          // ),
-          // const SizedBox(width: 16, height: 16),
-          // FloatingActionButton(
-          //   heroTag: 'feedback',
-          //   onPressed: () => Navigator.pushNamed(context, '/feedback_admin'),
-          //   child: const Icon(Icons.feedback),
-          // ),
         ],
       );
+    }
+    return null;
   }
 
   @override
@@ -468,7 +456,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             BoxShadow(
               color: Colors.black.withOpacity(.1),
               blurRadius: 30,
-              offset: Offset(0, 10),
+              offset: const Offset(0, 10),
             ),
           ],
           borderRadius: BorderRadius.circular(50),
@@ -489,14 +477,14 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             child: Stack(
               children: [
                 AnimatedContainer(
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   curve: Curves.fastLinearToSlowEaseIn,
                   width: index == currentIndex
                       ? displayWidth * .36
                       : displayWidth * .25,
                   alignment: Alignment.center,
                   child: AnimatedContainer(
-                    duration: Duration(seconds: 1),
+                    duration: const Duration(seconds: 1),
                     curve: Curves.fastLinearToSlowEaseIn,
                     height: index == currentIndex ? displayWidth * .12 : 0,
                     width: index == currentIndex ? displayWidth * .39 : 0,
@@ -512,7 +500,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                   ),
                 ),
                 AnimatedContainer(
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   curve: Curves.fastLinearToSlowEaseIn,
                   width: index == currentIndex
                       ? displayWidth * .31
@@ -523,18 +511,18 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       Row(
                         children: [
                           AnimatedContainer(
-                            duration: Duration(seconds: 1),
+                            duration: const Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
                             width:
                                 index == currentIndex ? displayWidth * .12 : 0,
                           ),
                           AnimatedOpacity(
                             opacity: index == currentIndex ? 1 : 0,
-                            duration: Duration(seconds: 1),
+                            duration: const Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
                             child: Text(
                               index == currentIndex
-                                  ? '${listOfStrings[index]}'
+                                  ? listOfStrings[index]
                                   : '',
                               style: TextStyle(
                                 color:
@@ -549,7 +537,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       Row(
                         children: [
                           AnimatedContainer(
-                            duration: Duration(seconds: 1),
+                            duration: const Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
                             width:
                                 index == currentIndex ? displayWidth * .03 : 20,
@@ -572,9 +560,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         ),
       ),
       body: currentIndex == 1
-          ? OrderHistoryScreen()
+          ? const OrderHistoryScreen()
           : currentIndex == 2
-              ? AdminFeedbackScreen()
+              ? const AdminFeedbackScreen()
               : ListView(
                   padding: EdgeInsets.zero,
                   children: [

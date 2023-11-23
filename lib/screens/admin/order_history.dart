@@ -1,6 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
@@ -14,25 +14,25 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   String defaultImg =
       "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
 
-  List<bool> _buttonSelection = [false, false];
+  final List<bool> _buttonSelection = [false, false];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
+          preferredSize: const Size.fromHeight(120),
           child: Container(
               height: 120,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 60,
                   left: 30,
                   right: 10,
@@ -51,13 +51,6 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                               fontWeight: FontWeight.bold,
                             )),
                     ToggleButtons(
-                      children: [
-                        Icon(
-                          Icons.paid,
-                          // color: Colors.green,
-                        ),
-                        Icon(Icons.warning_rounded),
-                      ],
                       borderRadius: BorderRadius.circular(30),
                       isSelected: _buttonSelection,
                       selectedColor:
@@ -73,6 +66,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                           }
                         });
                       },
+                      children: const [
+                        Icon(Icons.paid),
+                        Icon(Icons.warning_rounded),
+                      ],
                     ),
                   ],
                 ),
@@ -100,7 +97,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 DocumentSnapshot ds = snapshot.data!.docs[index];
-                print(ds);
+                
                 String name = '';
                 for (var i = 0; i < ds['items'].length; i++) {
                   name += ds['items'][i]['title'] +
@@ -117,7 +114,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                       //show a modal sheet containing the order details
                       showModalBottomSheet(
                           context: context,
-                          builder: (context) => Container(
+                          builder: (context) => SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * 0.5,
                                 child: Column(
@@ -144,27 +141,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                       ),
                                     ),
                                     ListTile(
-                                      title: Text('Total'),
+                                      title: const Text('Total'),
                                       trailing: Text(
                                           '₹${ds['total'].toStringAsFixed(2)}'),
                                     ),
                                     ListTile(
-                                      title: Text('Payment Status'),
+                                      title: const Text('Payment Status'),
                                       trailing: Text(
                                           ds['paid'] ? 'Paid' : 'Not Paid'),
                                     ),
-                                    // ListTile(
-                                    //   title: Text('Customer Name'),
-                                    //   trailing: Text(ds['name']),
-                                    // ),
-                                    // ListTile(
-                                    //   title: Text('Customer Phone'),
-                                    //   trailing: Text(ds['phone']),
-                                    // ),
-                                    // ListTile(
-                                    //   title: Text('Customer Address'),
-                                    //   trailing: Text(ds['address']),
-                                    // ),
                                   ],
                                 ),
                               ));
@@ -173,7 +158,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                       title: Expanded(
                         child: Row(
                           children: [
-                            Container(
+                            SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: Text(
                                 name,

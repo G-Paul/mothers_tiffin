@@ -15,7 +15,7 @@ import 'screens/shared/user_details.dart';
 import 'screens/checkout.dart';
 import 'screens/payment_new.dart';
 import 'screens/feedback.dart';
-import 'screens/admin/get_feedback.dart';
+import 'screens/admin/admin_feedback.dart';
 import 'screens/admin/order_history.dart';
 import 'screens/utils/cart_provider.dart';
 

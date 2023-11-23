@@ -25,9 +25,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         'paid': false,
       }).then((value) {
         // selectedItems.clear();
-        final order_id = value.id;
+        final orderId = value.id;
         Navigator.of(context).pushNamed('/payment', arguments: {
-          'orderId': order_id,
+          'orderId': orderId,
           'total': selectedItems.values
               .map((e) => e['price'] * e['quantity'])
               .reduce((value, element) => value + element)
@@ -52,18 +52,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
+          preferredSize: const Size.fromHeight(120),
           child: Container(
               height: 120,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 60,
                   left: 10,
                 ),
@@ -71,11 +71,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   children: [
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: Icon(Icons.arrow_back),
+                      icon: const Icon(Icons.arrow_back),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     Text("Checkout",
                         style: Theme.of(context)
                             .textTheme
@@ -124,7 +122,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.secondary,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20))),
             child: Row(
