@@ -13,29 +13,62 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final String defaultImg =
       "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
 
-  void checkout(Map<String, dynamic> selectedItems) {
+  void createNewOrder(Map<String, dynamic> selectedItems) {
+    num total = selectedItems.values
+        .map((e) => e['price'] * e['quantity'])
+        .reduce((value, element) => value + element);
     try {
       FirebaseFirestore.instance.collection('Order').add({
         'user': FirebaseAuth.instance.currentUser!.uid,
         'items': selectedItems.values.toList(),
-        'total': selectedItems.values
-            .map((e) => e['price'] * e['quantity'])
-            .reduce((value, element) => value + element),
-        'time': DateTime.now(),
+        'total': total,
         'paid': false,
+        'time': DateTime.now(),
       }).then((value) {
-        // selectedItems.clear();
-        final orderId = value.id;
         Navigator.of(context).pushNamed('/payment', arguments: {
-          'orderId': orderId,
-          'total': selectedItems.values
-              .map((e) => e['price'] * e['quantity'])
-              .reduce((value, element) => value + element)
-              .toStringAsFixed(2)
+          'orderId': value.id,
+          'total': total.toStringAsFixed(2),
         });
       });
     } catch (e) {
-      //show the error in a snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
+
+  void checkout(Map<String, dynamic> selectedItems) {
+    try {
+      FirebaseFirestore.instance
+          .collection('Order')
+          .where('user', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where('paid', isEqualTo: false)
+          .get()
+          .then((value) {
+        if (value.docs.isNotEmpty) {
+          final orderId = value.docs.first.id;
+          final items = value.docs.first.data()['items'] as List<dynamic>;
+          final newItems = selectedItems.values.toList();
+          items.addAll(newItems);
+          FirebaseFirestore.instance
+              .collection('Order')
+              .doc(orderId)
+              .update({'items': items}).then((value) {
+            Navigator.of(context).pushNamed('/payment', arguments: {
+              'orderId': orderId,
+              'total': items
+                  .map((e) => e['price'] * e['quantity'])
+                  .reduce((value, element) => value + element)
+                  .toStringAsFixed(2)
+            });
+          });
+        } else {
+          createNewOrder(selectedItems);
+        }
+      });
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString()),
