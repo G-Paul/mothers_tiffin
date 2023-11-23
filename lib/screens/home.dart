@@ -137,12 +137,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/feedback', arguments: userData);
-        },
-        child: const Icon(Icons.feedback),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/feedback', arguments: userData);
+            },
+            child: const Icon(Icons.feedback),
+          ),
+          SizedBox(
+            height: 70,
+          ),
+        ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomSheet: (cartProvider.selectedItems.isEmpty)
           ? const SizedBox(
               height: 0,
@@ -151,7 +160,12 @@ class _HomeScreenState extends State<HomeScreen> {
           : Container(
               height: 70,
               width: MediaQuery.of(context).size.width,
-              color: Theme.of(context).colorScheme.primary,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  )),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -169,6 +183,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ElevatedButton(
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.secondary),
+                      ),
                       onPressed: () {
                         Navigator.pushNamed(context, '/checkout',
                             arguments: cartProvider.selectedItems);
