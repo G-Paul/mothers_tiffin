@@ -31,18 +31,18 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(120),
+          preferredSize: const Size.fromHeight(120),
           child: Container(
               height: 120,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 60,
                   left: 30,
                   right: 10,
@@ -61,13 +61,6 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                               fontWeight: FontWeight.bold,
                             )),
                     ToggleButtons(
-                      children: [
-                        Icon(
-                          Icons.paid,
-                          // color: Colors.green,
-                        ),
-                        Icon(Icons.warning_rounded),
-                      ],
                       borderRadius: BorderRadius.circular(30),
                       isSelected: _buttonSelection,
                       selectedColor:
@@ -83,6 +76,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                           }
                         });
                       },
+                      children: const [
+                        Icon(Icons.paid),
+                        Icon(Icons.warning_rounded),
+                      ],
                     ),
                   ],
                 ),
@@ -110,7 +107,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 DocumentSnapshot ds = snapshot.data!.docs[index];
-                print(ds);
+                
                 String name = '';
                 for (var i = 0; i < ds['items'].length; i++) {
                   name += ds['items'][i]['title'] +
@@ -408,7 +405,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                       title: Expanded(
                         child: Row(
                           children: [
-                            Container(
+                            SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: Text(
                                 name,
