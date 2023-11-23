@@ -1,12 +1,6 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
-// import 'dart:js_interop';
-
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_build_context_synchronously
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,7 +15,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   String defaultImg =
       "https://firebasestorage.googleapis.com/v0/b/kitchen-mamas.appspot.com/o/startup_logo.png?alt=media&token=69197ee9-0dfd-4ee6-8326-ded0fc368ce4";
 
-  List<bool> _buttonSelection = [false, false];
+  final List<bool> _buttonSelection = [false, false];
   String? userName;
   String? userPhone;
   String? userImage;
@@ -128,7 +122,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                           builder: (context) {
                             return AlertDialog(
                               backgroundColor: Colors.transparent,
-                              content: Container(
+                              content: SizedBox(
                                 height: MediaQuery.of(context).size.width * 0.4,
                                 width: MediaQuery.of(context).size.width * 0.7,
                                 // color: Colors.black.withOpacity(0.5),
@@ -153,7 +147,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                         showModalBottomSheet(
                             context: context,
                             builder: (context) {
-                              return Container(
+                              return SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * 0.7,
                                 child: Column(
@@ -439,7 +433,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                           //   width: 30,
                           // ),
                           Text(
-                            '${DateFormat('dd-MM-yy   hh:mm a').format(ds['time'].toDate())}',
+                            DateFormat('dd-MM-yy   hh:mm a').format(ds['time'].toDate()),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!

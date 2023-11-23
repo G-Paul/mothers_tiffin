@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: const Icon(Icons.feedback),
           ),
-          SizedBox(
+          const SizedBox(
             height: 70,
           ),
         ],
@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
                   )),
