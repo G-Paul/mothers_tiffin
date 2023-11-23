@@ -201,7 +201,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             _signUpState!,
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                           ),
                         ),

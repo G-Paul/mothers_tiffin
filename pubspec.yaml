@@ -29,6 +29,8 @@ dependencies:
   provider: ^6.1.1
   flutter_floating_bottom_bar: ^1.2.0
   floating_navbar: ^2.0.2
+  url_launcher: ^6.2.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

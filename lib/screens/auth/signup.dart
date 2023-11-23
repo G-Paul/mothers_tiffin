@@ -157,8 +157,7 @@ class _SignInScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  InputDecoration _textFieldDecoration(
-      {required String labelText}) {
+  InputDecoration _textFieldDecoration({required String labelText}) {
     return InputDecoration(
       contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -212,27 +211,33 @@ class _SignInScreenState extends State<SignUpScreen> {
       context: context,
       builder: (context) => AlertDialog(
         surfaceTintColor: Colors.transparent,
-        title: Text(
-          title,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        // title: Text(
+        //   title,
+        //   style: TextStyle(
+        //     color: Theme.of(context).colorScheme.secondary,
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
         content: TextFormField(
-            obscureText: obscure,
-            controller: textController,
-            decoration: InputDecoration(
-              hintText: hintText,
-              labelText: labelText,
-            )),
+          obscureText: obscure,
+          controller: textController,
+          decoration: _textFieldDecoration(labelText: 'Verify Password'),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(null),
+            style: ButtonStyle(
+              foregroundColor: MaterialStatePropertyAll(
+                  Theme.of(context).colorScheme.secondary),
+            ),
             child: Text(cancelText),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(textController.text),
+            style: ButtonStyle(
+              foregroundColor: MaterialStatePropertyAll(
+                  Theme.of(context).colorScheme.secondary),
+            ),
             child: Text(okText),
           ),
         ],
@@ -530,7 +535,7 @@ Future<ImageSource?> showImageSource(BuildContext context) async {
                   minVerticalPadding: 10,
                   leading: FaIcon(
                     FontAwesomeIcons.camera,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.secondary,
                     size: 20,
                   ),
                   title: const Text("Camera"),
@@ -540,7 +545,7 @@ Future<ImageSource?> showImageSource(BuildContext context) async {
                   minVerticalPadding: 10,
                   leading: FaIcon(
                     FontAwesomeIcons.images,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.secondary,
                     size: 20,
                   ),
                   title: const Text("Gallery"),
