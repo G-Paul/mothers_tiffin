@@ -5,18 +5,17 @@ class LightThemes {
   static final theme1 = ThemeData(
     colorScheme: const ColorScheme(
       brightness: Brightness.light,
-      primary: Color.fromARGB(255, 255, 248, 120),
-      secondary: Color.fromARGB(255, 255, 157, 0),
-      background: Color(0xFFf7f7f7),
+      primary: Color.fromRGBO(255, 179, 43, 1),
+      secondary: Color.fromARGB(255, 245, 198, 60),
+      background: Color.fromARGB(255, 233, 238, 224),
       onPrimary: Color.fromARGB(195, 0, 0, 0),
-      onSecondary: Color.fromARGB(165, 0, 0, 0),
-      onBackground: Colors.black,
-      onError: Colors.black,
-      error: Colors.red,
-      // primaryVariant: Color(0xFFffea00),
+      onSecondary: Color.fromARGB(65, 0, 0, 0),
+      onBackground: Color.fromARGB(255, 0, 0, 0),
+      onError: Color.fromARGB(255, 255, 255, 255),
+      error: Color.fromARGB(255, 255, 0, 0),
+      // primaryVariant: Color.fromARGB(255, 255, 159, 28),
       surface: Color.fromARGB(255, 252, 250, 236),
-      // surface: Colors.white,
-      onSurface: Colors.black,
+      onSurface: Color.fromARGB(255, 0, 0, 0),
     ),
     fontFamily: GoogleFonts.josefinSlab().fontFamily,
     fontFamilyFallback: const ["Montserrat"],
@@ -34,10 +33,10 @@ class LightThemes {
 class DarkThemes {
   static final theme1 = ThemeData(
     colorScheme: const ColorScheme.dark(
-      primary: Color(0xFF1b4332),
-      secondary: Color(0x00ff9f1c),
-      background: Color(0x00081c15),
-      onPrimary: Colors.white,
+      primary: Color.fromARGB(255, 27, 67, 50),
+      secondary: Color.fromARGB(255, 255, 159, 28),
+      background: Color.fromARGB(255, 8, 28, 21),
+      onPrimary: Color.fromARGB(255, 255, 255, 255),
     ),
     useMaterial3: true,
   );

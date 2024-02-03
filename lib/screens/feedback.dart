@@ -70,7 +70,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
         children: [
           TopBar(userData: userData),
           Container(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.primary,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
               decoration: BoxDecoration(
